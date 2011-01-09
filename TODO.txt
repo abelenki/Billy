@@ -1,0 +1,5 @@
+* implement pagination at least for invoices
+* invoice must get billing periods as an option ( start, end date )
+* generators must implement billing periods
+* generators must reference created invoices
+* check for missing references, like missing companies for invoices

@@ -1,0 +1,22 @@
+application: blizzapp
+version: 3
+runtime: python
+api_version: 1
+
+handlers:  
+- url: /css
+  static_dir: css
+  login: required
+
+- url: /js
+  static_dir: js
+  login: required
+
+- url: /testpdf
+  script: testpdf.py
+  login: required
+
+- url: /.*
+  script: bootstrap.py
+  login: required
+
