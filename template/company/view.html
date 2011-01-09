@@ -1,0 +1,30 @@
+<a id="context-add" class="button" href="/invoice/edit/?company={{company.key}}">add invoice</a>
+<div id="list-box">
+    <ul id="list-tabs">
+        <li class=""><a href="/company/edit/{{company.key}}">edit company</a></li>
+        <li class="active"><a href="/company/view/{{company.key}}">invoices</a></li>
+    </ul>
+    <h4>Invoices for {{company.name}}</h4>
+    {%if company.invoices%}
+    <table id="list-content">
+        <tr>
+            <th>name</th>
+            <th>description</th>
+            <th colspan="3">actions</th>
+            <th>billing status</th>
+        </tr>
+        {% for invoice in company.invoices %}
+        <tr class="{% cycle uneven,even %}">
+            <td>{{invoice.customer.fullname}}</td>
+            <td>{{invoice.description}}</td>
+            <td><a href="/invoice/edit/{{invoice.key}}">edit</a></td>
+            <td><a href="/invoice/render/{{invoice.key}}">download</a></td>
+            <td><a href="/invoice/delete/{{invoice.key}}">delete</a></td>
+            <td class="due-status-{{invoice.status}}">{{invoice.duedate}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {%else%}
+    <p>{{company.name}} has no invoices yet</p>
+    {%endif%}
+</div>

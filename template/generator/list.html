@@ -1,0 +1,24 @@
+<a id="context-add" class="button" href="/generator/edit/">add generator</a>
+<div id="list-box">
+    <ul id="list-tabs">
+        <li class="active"><a href="/generator/list/">generators</a></li>
+        <li class=""><a href="/generator/edit/">add generator</a></li>
+    </ul>
+    <table id="list-content">
+        <tr>
+            <th>customer</th>
+            <th>company</th>
+            <th>description</th>
+            <th colspan="2">actions</th>
+        </tr>
+        {% for generator in generators %}
+        <tr class="{% cycle uneven,even %}">
+            <td>{{generator.customer.fullname}}</td>
+            <td>{{generator.company.name}}</td>
+            <td>{{generator.description}}</td>
+            <td><a href="/generator/edit/{{generator.key}}">edit</a></td>
+            <td><a href="/generator/delete/{{generator.key}}">delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>

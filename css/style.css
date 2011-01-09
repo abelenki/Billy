@@ -1,0 +1,79 @@
+@import url('reset.css');
+
+body{color: #444; font:14px/22px "Lucida Grande", "MS Trebuchet", "Arial", serif;}
+a, a:hover, a:visited, a:active{text-decoration:none; color: #4488cc;}
+table{width:100%;}
+td,th{text-align:left;}
+hr{border:1px solid #f0f0f0;border-width:1px 0 0;margin: 1em 0;}
+h4{font-size:120%;line-height:230%;}
+
+/*layout*/
+#header{width:960px;margin:auto;background-color: #fff;overflow:hidden;}
+#box{width:960px;margin:auto;}
+div#footer{width:960px;margin:auto;margin:3em auto;background-color:#fafafa;font-size:90%;text-align:center;}
+
+#logo{float:left;margin-bottom:0.5em;}
+#logo h1{font: 42px/56px "Georgia", serif;text-transform:lowercase;}
+#logo span{font: 12px "Georgia", serif;}
+
+#list-box{clear:both;}
+#list-box h4{font-size: 140%;padding:0 1em;}
+
+
+/*big blue button*/
+#context-add{float:right;font-size:120%;line-height:180%;padding:0 1em;background-color:#4488cc;
+    color: #fff;margin: 1em 0;-moz-border-radius:9px;-moz-box-shadow:1px 2px 3px #ccc;
+    background:-moz-linear-gradient(270deg, #4488cc, #3377AA) repeat scroll 0 0 transparent;}
+
+/*lists*/
+#navigation-main{background-color: #ddd; -moz-border-radius:5px 5px 5px 5px;
+    -moz-box-shadow:0 1px 1px rgba(0, 0, 0, 0.2);}
+
+#navigation-super{float:right;-moz-border-radius:5px 5px 5px 5px;
+    -moz-box-shadow:0 1px 1px rgba(0, 0, 0, 0.2);
+    border-color:#E9E9E9 #E9E9E9 #F5F5F5;border-style:solid;border-width:1px;
+    background:-moz-linear-gradient(270deg, #FCFCFC, #ECECEC) repeat scroll 0 0 transparent;}
+
+
+/*tabs*/
+#list-tabs{background:#f0f0f0;border:1px solid #f0f0f0; overflow:hidden;line-height:2em;-moz-border-radius:5px 5px 5px 5px;}
+#list-tabs li{display:inline;overflow:auto;}
+#list-tabs li a{border-radius: 5px; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius:5px 5px 5px 5px;padding:0 1em; display:inline-block;text-shadow:#eef 1px 1px 0px;}
+#list-tabs li.active a{background-color:#fff;}
+#list-tabs li a:hover{ color:#fff;background-color:#4488cc;text-shadow:#ccc 1px 1px 1px;}
+
+/*lists/table*/
+#list-content{background-color:#fafafa;margin-top: 1em;-moz-border-radius:5px 5px 5px 5px;}
+#list-content tr, #list-content li{line-height:2em;}
+#list-content td, #list-content th{padding:0 1em;}
+
+/*pagebody,forms*/
+form.form-invoice{border:1px solid #f0f0f0;margin:1em 0;padding:1em;}
+textarea{width:300px;height:4em;clear:both;display:block;}
+form div{padding:0.5em 0;}
+fieldset{border:1px solid #f0f0f0;padding:1em;}
+legend{font-size:90%;font-weight:bold;}
+/*label{display:block;}*/
+select{display:block; width: 120px;}
+
+form dl dt{ width: 100px; float:left; clear:left; padding-bottom:1em;}
+form dl dd{ float:left; width: 300px; clear:right;}
+
+/*form label{clear:right;float:left;}*/
+
+/*nav elements*/
+div.featured{padding:1em; border: 1px solid #f0f0f0;}
+ul.hnav{line-height:2em;}
+ul.hnav li{display:inline;border-right:2px ridge #cfcfcf;}
+ul.hnav li:last-child{border:none;}
+ul.hnav li a{color:#444; padding:0 1em; display:inline;text-shadow:#eee 1px 1px 0px;}
+tr.even,li.even{background-color:#fafaff;}
+tr.uneven,li.uneven{background-color:#f0f0f3;}
+
+
+/*invoice status*/
+.due-status-1{background-color:#cceeff;}
+.due-status-2{background-color:#b9ffb7;}
+.due-status-3{background-color:#ffff86;}
+.due-status-4{background-color:#ffd686;}
+.due-status-5{background-color:#ff8686;}

@@ -1,0 +1,133 @@
+<a id="context-add" class="button" href="/invoice/edit/">add invoice</a>
+<div id="list-box">
+    <ul id="list-tabs">
+        <li {%ifequal tab "all"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=all">all invoices</a></li>
+        <li {%ifequal tab "overdue"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=overdue">overdue invoices</a></li>
+        <li {%ifequal tab "billed"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=billed">billed invoices</a></li>
+        <li {%ifequal tab "payed"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=payed">payed invoices</a></li>
+    </ul>
+    <h4><a href="/company/view/{{invoice.company.key}}">{{invoice.company.name}}</a></h4>
+{% if invoice_total %}
+    <div class="featured">
+        invoice total: <strong>{{ invoice_total }}</strong> invoice created on <strong>{{invoice.created.date}}</strong>
+    </div>
+{% endif %}
+    <form class="form-invoice" action="/invoice/save/{{key}}" method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="customer">
+                customer
+            </label>
+            <select name="customer">
+            {% for customer in customers %}
+                <option {% ifequal customer_key customer.key %}selected="selected"{%endifequal%} value="{{customer.key}}">{{customer.surname}}, {{customer.firstname}}</option>
+            {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="company">
+                company
+            </label>
+            <select name="company">
+            {% for company in companies %}
+                <option {% ifequal company_key company.key %}selected="selected"{%endifequal%} value="{{company.key}}">{{company.name}}</option>
+            {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="description">
+                description
+            </label>
+            <textarea id="description" name="description">{{invoice.description}}</textarea>
+        </div>
+{% if key %}
+
+
+        <div>
+            <input name="is_payed" id="is_payed" type="checkbox" {%if invoice.is_payed%}checked="1"{%endif%} />
+            <label for="is_payed">
+                invoice is payed
+            </label>
+        </div>
+        {% if invoice.is_payed %}
+        <div>
+            <label for="payed">
+                payment date
+            </label>
+            <input id="payed" name="payed" value="{{invoice.payed.date}}" />
+        </div>
+        {% endif %}
+        {% if invoice.billed %}
+        <div>
+            <h5>{{invoice.billing_number}}</h5>
+            <label for="billed">
+                billing date
+            </label>
+            <input id="billed" name="billed" value="{{billed}}" />
+        </div>
+        {% else %}
+            <input name="is_billed" id="is_billed" type="checkbox" />
+            <label for="is_billed">
+                invoice is billed
+            </label>
+        {% endif %}
+    {% endif %}
+        <div>
+            <input type="submit" value="Save" name="submit" />
+        </div>
+    </form>
+    {% if key %}
+    <div>
+        <form action="/invoice/addline/{{key}}" method="POST" enctype="multipart/form-data">
+            <fieldset>
+                <legend>add billing line</legend>
+                <label for="line_name">
+                    description
+                </label>
+                <input name="name" id="new_name" />
+                <label for="new_name">
+                    amount
+                </label>
+                <input name="amount" id="new_amount" />
+                <input type="submit" value="save" />
+            </fieldset>
+        </form>
+    </div>
+    <div id="invoice-lines">
+        <!--<table>-->
+        <!--    <tr>-->
+        <!--        <th>description</th>-->
+        <!--        <th>amount</th>-->
+        <!--        <th>actions</th>-->
+        <!--    </tr>-->
+        <!--</table>-->
+        {% for line in invoice.invoice_lines %}
+        <form action="/invoice/saveline/{{line.key}}" method="POST">
+        <table>
+            <tr class="{% cycle uneven,even %}">
+                <td>
+                    <input type="text" size="60" name="name" value="{{line.name}}" />
+                </td>
+                <td width="10%">
+                    <input name="amount" value="{{line.amount}}" />
+                </td>
+                <td width="100%">
+                    <input type="submit" value="save" />
+                    <a href="/invoice/delline/{{line.key}}">delete</a>
+                </td>
+            </tr>
+        </table>
+        </form>
+        {% endfor %}
+    </div>
+    {% if invoice_total %}
+        <h5>invoice total: {{ invoice_total }}</h5>
+    {% endif %}
+    <br/>
+    {% if invoice.invoice_logs %}
+    <strong>invoice history</strong>
+    {% for log in invoice.invoice_logs %}
+        <div><small>{{log.created}}:{{log.text}}</small></div>
+    {% endfor %}
+    {% endif %}
+{%endif%}
+</div>

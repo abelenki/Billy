@@ -1,0 +1,30 @@
+<a id="context-add" class="button" href="/invoice/edit/">add invoice</a>
+<div id="list-box">
+    <ul id="list-tabs">
+        <li {%ifequal tab "all"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=all">all invoices</a></li>
+        <li {%ifequal tab "overdue"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=overdue">overdue invoices</a></li>
+        <li {%ifequal tab "billed"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=billed">billed invoices</a></li>
+        <li {%ifequal tab "payed"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=payed">payed invoices</a></li>
+    </ul>
+    <table id="list-content">
+        <tr>
+            <th>name</th>
+            <th>description</th>
+            <th colspan="4">actions</th>
+            <th>created</th>
+            <th>billing status</th>
+        </tr>
+        {% for invoice in invoices %}
+        <tr class="{% cycle uneven,even %}">
+            <td>{{invoice.customer.fullname}}</td>
+            <td>{{invoice.description}}</td>
+            <td><a href="/invoice/edit/{{invoice.key}}">edit</a></td>
+            <td><a href="/invoice/render/{{invoice.key}}">download</a></td>
+            <td><a href="/invoice/mail/{{invoice.key}}">e-mail</a></td>
+            <td><a href="/invoice/delete/{{invoice.key}}">delete</a></td>
+            <td>{{invoice.created.date}}</td>
+            <td class="due-status-{{invoice.status}}">{{invoice.duedate}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>

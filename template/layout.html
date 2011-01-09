@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ current.title }}</title>
+    <link type="text/css" rel="stylesheet" href="/css/style.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="/css/favicon.ico">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+</head>
+<body ondragstart="return false;">
+    <div id="header">
+        <div id="logo">
+            <h1>billy</h1>
+            <span><em>Billing & CRM</em></span>
+        </div>
+        <ul id="navigation-super" class="hnav">
+            <li><a href="/invoice/list/">dashboard</a></li>
+            <li><a href="/user/logout/">logout</a></li>
+        </ul>
+    </div>
+    <div id="box">
+        <ul id="navigation-main" class="hnav">
+            <li><a href="/invoice/list/">invoices</a></li>
+            <li><a href="/customer/list/">customers</a></li>
+            <li><a href="/generator/list/">generators</a></li>
+            <li><a href="/company/list/">companies</a></li>
+        </ul>
+        <div id="content">
+            {{ content }}
+        </div>
+    </div>
+    <div id="footer">
+        <ul id="navigation-footer" class="hnav">
+            <li><a href="/invoice/list/">invoices</a></li>
+            <li><a href="/customer/list/">customers</a></li>
+            <li><a href="/generator/list/">generators</a></li>
+            <li><a href="/company/list/">companies</a></li>
+        </ul>
+    </div>
+    <script>
+        //$('ul').each( function(i, el){
+        //    //console.log($(el).attr('id'));
+        //    //console.log($(el).attr('class'));
+        //});
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<a id="context-add" class="button" href="/generator/edit/">add generator</a>
+<div id="list-box">
+    <ul id="list-tabs">
+        <li class="active"><a href="/generator/edit/{%if key%}{{generator.key}}{%endif%}">edit generator</a></li>
+        <li class=""><a href="/generator/list/">generators</a></li>
+    </ul>
+    <h4>{%if key%} Editing {{generator.description}}{%else%}Adding generator{%endif%}</h4>
+    {%if key %}{%if generator.lines.count %}
+    <div class="featured">
+        This generator was ran <strong>{{last_run}}</strong>. <a href="/generator/run/{{key}}">run generator now</a>
+    </div>
+    {%endif%}{%endif%}
+    <form action="/generator/save/{{key}}" method="POST" enctype="multipart/form-data">
+        <fieldset>
+            <legend>Account details for {{generator.description}}</legend>
+            {% if key %}
+                <h5>Generator for <a href="/company/edit/{{generator.company.key}}">{{generator.customer.fullname}}</a> by <a href="/company/edit/{{generator.company.key}}">{{generator.company.name}}</a></h5>
+                <dl>
+            {% else %}
+                <dl>
+                <dt>
+                    <label for="company">
+                        Company
+                    </label>
+                </dt>
+                <dd>
+                    <select id="company" name="company">
+                        {% for company in companies %}
+                        <option value="{{company.key}}">{{company.name}}</option>
+                        {% endfor %}
+                    </select>
+                </dd>
+                <dt>
+                    <label for="customer">
+                        Customer
+                    </label>
+                </dt>
+                <dd>
+                    <select id="customer" name="customer">
+                        {% for customer in customers %}
+                        <option value="{{customer.key}}">{{customer.fullname}}</option>
+                        {% endfor %}
+                    </select>
+                </dd>
+            {% endif %}
+            <dt>
+                <label for="description">
+                    invoice description line
+                </label>
+            </dt>
+            <dd>
+                <input type="text" value="{{generator.description}}" id="description" name="description" />
+            </dd>
+            <dt>
+                <label for="start">
+                    Billing start date
+                </label>
+            </dt>
+            <dd>
+                <input type="date" value="{{generator.start.date}}" id="start" name="start" />
+            </dd>
+            <dt>
+                <label for="interval">
+                    billing interval
+                </label>
+            </dt>
+            <dd>
+                <input name="interval" id="interval" value="{{generator.interval}}" />
+            </dd>
+            <dt>
+                <label for="unit">
+                    interval unit
+                </label>
+            </dt>
+            <dd>
+                <select name="unit" id="unit">
+                    <option value="month" {% ifequal generator.unit "month" %}selected="selected"{%endifequal%}>Months</option>
+                    <option value="week" {% ifequal generator.unit "week" %}selected="selected"{%endifequal%}>Weeks</option>
+                    <option value="day" {% ifequal generator.unit "day" %}selected="selected"{%endifequal%}>Days</option>
+                </select>
+            </dd>
+            <dt>
+                <input type="submit" value="Save" name="submit" />
+            </dt>
+            <dd>
+            </dd>
+        </dl>
+        </fieldset>
+    </form>
+    {%if key%}
+    <form action="/generator/addline/{{key}}" method="POST" enctype="multipart/form-data">
+        <fieldset>
+            <legend>Billing lines</legend>
+            <label for="name">
+                description:
+                <input type="text" name="name" id="name" />
+            </label>
+            <label for="amount">
+                amount:
+                <input type="text" name="amount" id="amount" />
+            </label>
+            <input type="submit" value="add" />
+        {% if generator.lines.count %}
+        <hr/>
+        <table>
+            <tr>
+                <th>description</th>
+                <th colspan="2">amount</th>
+            </tr>
+            {% for line in generator.lines %}
+            <tr class="{% cycle uneven,even %}">
+                <td>{{line.name}}</td>
+                <td>{{line.amount}}</td>
+                <td><a href="/generator/delline/{{line.key}}">delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        {%endif%}
+        </fieldset>
+    </form>
+    {%endif%}
+</div>

@@ -1,0 +1,39 @@
+<a id="context-add" class="button" href="/invoice/edit/?customer={{customer.key}}">add invoice</a>
+<div id="list-box">
+    <ul id="list-tabs">
+        <li class="active"><a href="/customer/edit/{{customer.key}}">edit customer</a></li>
+        <li class=""><a href="/customer/view/{{customer.key}}">invoices</a></li>
+    </ul>
+    <h4>Editing {{customer.fullname}}</h4>
+    <form action="/customer/save/{{customer.key}}" method="POST" enctype="multipart/form-data">
+        <fieldset>
+            <legend>Account details for {{customer.fullname}}</legend>
+            <div>
+                <label for="firstname">
+                    First name
+                    <input type="text" value="{% if customer.key %}{{customer.firstname}}{%endif%}" name="firstname" id="firstname" />
+                </label>
+            </div>
+            <div>
+                <label for="surname">
+                    Surname
+                    <input type="text" value="{% if customer.key %}{{customer.surname}}{%endif%}" name="surname" id="surname" />
+                </label>
+            </div>
+            <div>
+                <label for="email">
+                    E-mail address
+                    <input type="text" value="{% if customer.key %}{{customer.email}}{%endif%}" name="email" id="email" />
+                </label>
+            </div>
+            <div>
+                <label for="address">
+                    Postal address
+                    <textarea id="address" name="address">{% if customer.key %}{{customer.address}}{%endif%}</textarea>
+                </label>
+            </div>
+        </fieldset>
+        <br/>
+        <input type="submit" value="Save" name="submit" />
+    <form>
+</div>

@@ -1,0 +1,22 @@
+<a id="context-add" class="button" href="/customer/add/">add customer</a>
+<div id="list-box">
+    <table id="list-content">
+        <tr>
+            <th>name</th>
+            <th>e-mail</th>
+            <th colspan="2">actions</th>
+        </tr>
+        {% for customer in customer_list %}
+        <tr class="{% cycle uneven,even %}">
+            <td>{{customer.fullname}}</td>
+            <td>{{customer.email}}</td>
+            <td>
+                <a href="/customer/edit/{{customer.key}}">edit</a>
+            </td>
+            <td>
+                <a href="/customer/delete/{{customer.key}}">delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>

@@ -1,0 +1,98 @@
+<a id="context-add" class="button" href="/invoice/edit/?company={{key}}">add invoice</a>
+<div id="list-box">
+    {%if key %}
+    <ul id="list-tabs">
+        <li class="active"><a href="/company/edit/{{company.key}}">edit company</a></li>
+        <li class=""><a href="/company/view/{{company.key}}">invoices</a></li>
+    </ul>
+    <h4>Edit {{company.name}}</h4>
+    {% else %}
+    <em>{{company.description}}</em>
+    <h4>Add new company</h4>
+    {% endif %}
+    <form action="/company/save/{{key}}" method="POST" enctype="multipart/form-data">
+        <fieldset>
+        <div>
+            <label for="name">
+                Name
+                <input type="text" value="{% if key %}{{company.name}}{%endif%}" name="name" id="name" />
+            </label>
+        </div>
+        <div>
+            <label for="email">
+                E-mail
+                <input type="text" value="{% if key %}{{company.email}}{%endif%}" name="email" id="email" />
+            </label>
+        </div>
+        <div>
+            <label for="address">
+                Description
+                <textarea id="description" name="description">{% if key %}{{company.description}}{%endif%}</textarea>
+            </label>
+        </div>
+        {% if key %}
+        <div>
+            <label for="postcode">
+                City
+                <input type="text" value="{% if key %}{{company.city}}{%endif%}" name="city" id="city" />
+            </label>
+        </div>
+        <div>
+            <label for="postcode">
+                Postcode
+                <input type="text" value="{% if key %}{{company.postcode}}{%endif%}" name="postcode" id="postcode" />
+            </label>
+        </div>
+        <div>
+            <label for="address">
+                Address
+                <textarea id="address" name="address">{% if key %}{{company.address}}{%endif%}</textarea>
+            </label>
+        </div>
+        <div>
+            <label for="country">
+                Country
+                <input type="text" value="{% if key %}{{company.country}}{%endif%}" name="country" id="country" />
+            </label>
+        </div>
+        <div>
+            <label for="bankaccount">
+                Bankaccount
+                <input type="text" value="{{company.bankaccount}}" name="bankaccount" id="bankaccount" />
+            </label>
+        </div>
+        <div>
+        <label for="footer">
+            Footer
+            <textarea id="footer" name="footer">{{company.footer}}</textarea>
+        </label>
+        </div>
+        <div>
+        <label for="introduction">
+            Invoice intro
+            <textarea id="introduction" name="introduction">{{company.introduction}}</textarea>
+        </label>
+        </div>
+        <div>
+        <label for="vat">
+            Vat
+            <input type="text" value="{{company.vat}}" name="vat" id="vat" />
+        </label>
+        </div>
+        <div>
+        <label for="billnr_template">
+            Billing number template
+            <input type="text" value="{{company.billnr_template}}" name="billnr_template" id="billnr_template" />
+        </label>
+        </div>
+        <div>
+            <label for="logo">
+                <img src="/company/logo/{{key}}" alt="upload a new company logo" height="100" />
+            </label>
+            <input type="file" value="" name="logo" id="logo" />
+        </div>
+        {% endif %}
+        <input type="submit" value="Save" name="submit" />
+        </fieldset>
+    <form>
+</div>

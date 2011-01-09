@@ -1,0 +1,32 @@
+<form method="post" action="/image/edit/{{img.key}}">
+    <fieldset>
+        <legend>image settings</legend>
+        <label for="img_name">
+            Name:
+            <input size="40" type="text" id="img_name" name="name" value="{{img.name}}" />
+            <br/>
+        </label>
+        <br/>
+        <label for="img_visible">
+            <input {%if img.visible %}checked="checked"{%endif%}type="checkbox" id="img_visible" name="visible" />
+            Visible
+        </label>
+    </fieldset>
+    <fieldset>
+        <legend>image position</legend>
+        <label for="img_top">
+            Top:
+            <input size="4" type="text" id="img_top" name="top" value="{{img.top}}" />
+        </label>
+        <label for="img_left">
+            Left:
+            <input size="4" type="text" id="img_left" name="left" value="{{img.left}}" />
+        </label>
+        <label for="img_priority">
+            Priority
+            <input size="2" type="text" id="img_priority" name="priority" value="{{img.priority}}" />
+        </label>
+    </fieldset>
+        <input type="submit" name="save" value="Save" />
+        <a class="button" href="/image/delete/{{img.key}}">delete {{img.name}}</a>
+</form>

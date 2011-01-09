@@ -1,0 +1,28 @@
+<a id="context-add" class="button" href="/company/edit/">add company</a>
+<div id="list-box">
+    <!--<ul id="list-tabs">-->
+    <!--    <li {%ifequal tab "all"%}class="active"{%endifequal%}><a href="/company/list/?tab=all">all companys</a></li>-->
+    <!--    <li {%ifequal tab "overdue"%}class="active"{%endifequal%}><a href="/company/list/?tab=overdue">overdue companys</a></li>-->
+    <!--    <li {%ifequal tab "billed"%}class="active"{%endifequal%}><a href="/company/list/?tab=billed">billed companys</a></li>-->
+    <!--    <li {%ifequal tab "payed"%}class="active"{%endifequal%}><a href="/company/list/?tab=payed">payed companys</a></li>-->
+    <!--</ul>-->
+    {%if companies %}
+    <table id="list-content">
+        <tr>
+            <th>name</th>
+            <th>description</th>
+            <th colspan="3">actions</th>
+            <!--<th>billing status</th>-->
+        </tr>
+        {% for company in companies %}
+        <tr class="{% cycle uneven,even %}">
+            <td>{{company.name}}</td>
+            <td>{{company.description}}</td>
+            <td><a href="/company/edit/{{company.key}}">edit</a></td>
+            <td><a href="/company/render/{{company.key}}">download</a></td>
+            <td><a href="/company/delete/{{company.key}}">delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {%endif%}
+</div>

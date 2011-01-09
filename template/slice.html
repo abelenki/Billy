@@ -1,0 +1,47 @@
+<form method="post" action="{{form_action}}">
+    {% if key %}
+    <fieldset>
+        <legend>Settings</legend>
+        <label for="slice_name">
+            Name:
+            <input id="slice_name" type="test" name="name" value="{{slice.name}}" />
+        </label>
+        <label for="slice_type">
+            Type: {{slice.type}}
+            <select name="type">
+                <option {%ifequal slice.type "PNG" %}selected="selected"{%endifequal%} value="PNG">PNG</option>
+                <option {%ifequal slice.type "JPEG" %}selected="selected"{%endifequal%} value="JPEG">JPEG</option>
+            </select>
+        </label>
+    </fieldset>
+    <fieldset>
+        <legend>Position, dimensions</legend>
+    {% else %}
+        <input type="hidden" name="name" value="New Slice" />
+        <input type="hidden" name="type" value="PNG" />
+    {% endif %}
+        <label for="slice_width">
+            Width:
+            <input size="4" id="slice_width" name="width" value="{{slice.width}}" />
+        </label>
+        <label for="slice_height">
+            Height:
+            <input size="4" id="slice_height" name="height" value="{{slice.height}}" />
+        </label>
+        <label for="slice_top">
+            Top:
+            <input size="4" id="slice_top" name="top" value="{{slice.top}}" />
+        </label>
+        <label for="slice_left">
+            Left:
+            <input size="4" id="slice_left" name="left" value="{{slice.left}}" />
+        </label>
+    {% if key %}
+    </fieldset>
+    {% endif %}
+        <input type="submit" name="save" value="Save" />
+    {% if key %}
+        <a class="button" onclick="$(this).up('form').request()" href="/image/slice/{{slice.key}}">download slice</a>
+        <a class="button" href="/slice/delete/{{slice.key}}">delete slice</a>
+    {% endif %}
+</form>
