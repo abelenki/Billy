@@ -77,3 +77,5 @@ tr.uneven,li.uneven{background-color:#f0f0f3;}
 .due-status-3{background-color:#ffff86;}
 .due-status-4{background-color:#ffd686;}
 .due-status-5{background-color:#ff8686;}
+
+.notice{margin:1em;padding:1em; background-color: #D1DBED; border: 1px solid #8BA2CC}

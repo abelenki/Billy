@@ -25,9 +25,9 @@ class Controller( webapp.RequestHandler ):
             company.bankaccount  = self.request.get('bankaccount')
             company.footer       = self.request.get('footer')
             company.introduction = self.request.get('introduction')
-            
+
             logo = self.request.get('logo')
-            
+
             if logo:
                 src = images.Image(logo)
                 src.horizontal_flip()
@@ -51,21 +51,24 @@ class Controller( webapp.RequestHandler ):
 
         self.response.out.write( company.logo )
 
+    def addAction( self, key = None ):
+        self.editAction( key );
+
     def editAction( self, key ):
         template_values = {};
-        
+
         if key:
             company = Company.get(key)
-            #template_values['upload_url'] = blobstore.create_upload_url('/company/upload/%s' % key )            
+            #template_values['upload_url'] = blobstore.create_upload_url('/company/upload/%s' % key )
             template_values['key']        = key
         else:
             company = Company()
-        
+
         template_values['company'] = company
 
         path = os.path.join(os.path.dirname(__file__), '../template/company/edit.html')
         template_values['content'] = template.render( path, template_values )
-        
+
         path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
         self.response.out.write(template.render(path, template_values))
 
@@ -87,10 +90,10 @@ class Controller( webapp.RequestHandler ):
 
     def listAction( self, company_key ):
         account = Account().current()
-        companies = Company.gql('WHERE account = :1', account)
+        #companies = Company.gql('WHERE account = :1', account)
 
         template_values = {}
-        template_values['companies'] = companies
+        template_values['companies'] = account.companies()
 
         path = os.path.join(os.path.dirname(__file__), '../template/company/list.html')
         template_values['content'] = template.render( path, template_values )
@@ -100,7 +103,7 @@ class Controller( webapp.RequestHandler ):
 
     def deleteAction( self, key ):
         company = Company.get( urllib.unquote(key))
-        
+
         if company.invoices().count() > 0:
             self.response.out.write("company has invoices, delete those first")
             return
@@ -109,4 +112,3 @@ class Controller( webapp.RequestHandler ):
         #    invoice.delete()
         company.delete();
         self.redirect('/company/list/')
-

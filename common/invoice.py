@@ -4,23 +4,43 @@ from common import render
 
 class Controller( webapp.RequestHandler ):
     def get( self, action, key = None ):
+        self.template_values = {}
+
         account = Account().current()
 
         if not account.companies():
-            self.redirect( '/company/add/' )
-
-        if not account.customers():
-            self.redirect( '/customer/add/' )
-
-
-        if hasattr( self, "%sAction" % action.rstrip('/')):
+            self.template_values['notice'] = """
+                <a id="context-add" class="button" href="/company/add/">add company</a>
+                <h4><strong>You did not create a company yet!</strong></h4>
+                <p>You should really go and create a company <em><a href='/company/add/'>now</a></em> ;-)</p>
+            """;
+            action = 'list'
+        elif not account.customers():
+            self.template_values['notice'] = """
+                <a id="context-add" class="button" href="/customer/add/">add customer</a>
+                <h4><strong>No customers found!</strong></h4>
+                <p>We strongly suggest you get one <strong><a href='/customer/add/'>now</a></strong> ;-)</p>
+            """;
+            action = 'list'
+        elif hasattr( self, "%sAction" % action.rstrip('/')):
             method = getattr( self, "%sAction" % action )
             method( key )
+
+        self.renderTemplate( action, self.template_values )
+
+
 
     def post( self, action, key = None ):
         if hasattr( self, "%sAction" % action.rstrip('/')):
             method = getattr( self, "%sAction" % action )
             method( key )
+
+    def renderTemplate( self, action, template_values ):
+        path = os.path.join(os.path.dirname(__file__), '../template/invoice/%s.html' % action )
+        self.template_values['content'] = template.render( path, self.template_values )
+
+        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
+        self.response.out.write(template.render(path, self.template_values))
 
     def saveAction( self, key ):
         if self.request.method == 'POST':
@@ -99,26 +119,15 @@ class Controller( webapp.RequestHandler ):
 
 
     def viewAction( self, key ):
-        template_values = {}
-
         invoice = db.get(key)
         account = Account().current()
 
-        template_values['invoice'] = invoice
-        template_values['customers'] = account.customers()
-        template_values['invoices']  = invoice.invoices(0,10)
-
-
-
-        path = os.path.join(os.path.dirname(__file__), '../template/invoice/view.html')
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
-        self.response.out.write(template.render(path, template_values))
-
+        self.template_values['invoice'] = invoice
+        self.template_values['customers'] = account.customers()
+        self.template_values['invoices']  = invoice.invoices(0,10)
 
     def listAction( self, invoice_key ):
-        template_values = {};
+        #template_values = {};
         account = Account().current()
 
         gql = []
@@ -135,14 +144,15 @@ class Controller( webapp.RequestHandler ):
             tab = 'all'
             invoices = Invoice.gql('where account = :1 order by billed asc', account )
 
-        template_values['tab']      = tab
-        template_values['invoices'] = invoices
+        self.template_values['tab']      = tab
+        self.template_values['invoices'] = invoices
 
-        path = os.path.join(os.path.dirname(__file__), '../template/invoice/list.html')
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
-        self.response.out.write(template.render(path, template_values))
+        #path = os.path.join(os.path.dirname(__file__), '../template/invoice/list.html')
+        #template_values['content'] = template.render( path, template_values )
+        #
+        #path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
+        #self.response.out.write(template.render(path, template_values))
+        #print "hier"
 
     def deleteAction( self, key ):
         invoice = Invoice.get( urllib.unquote(key))
@@ -150,50 +160,47 @@ class Controller( webapp.RequestHandler ):
         for line in invoice.invoice_lines():
             line.delete()
 
-
         invoice.delete();
         self.redirect('/invoice/list/')
 
     def editAction( self, key ):
-        template_values = {};
+        #template_values = {};
         account = Account().current()
 
-        template_values['customers'] = account.customers()
-        template_values['companies'] = Company.gql('WHERE account = :1', account )
+        self.template_values['customers'] = account.customers()
+        self.template_values['companies'] = Company.gql('WHERE account = :1', account )
 
         if key:
             invoice = Invoice.get( key )
             total = sum( line.amount for line in invoice.invoice_lines() );
-            template_values['invoice_total'] = total
-            template_values['key'] = key
-
-
+            self.template_values['invoice_total'] = total
+            self.template_values['key'] = key
 
             if invoice.customer:
-                template_values['customer_key'] = invoice.customer.key()
+                self.template_values['customer_key'] = invoice.customer.key()
 
             if invoice.is_payed:
-                template_values['payed']    = invoice.payed.strftime('%Y-%m-%d');
+                self.template_values['payed']    = invoice.payed.strftime('%Y-%m-%d');
 
             if invoice.billed:
-                template_values['billed']   = invoice.billed.strftime('%Y-%m-%d');
+                self.template_values['billed']   = invoice.billed.strftime('%Y-%m-%d');
         else:
             invoice = Invoice()
 
             if self.request.get('customer'):
                 #print self.request.get('customer')
-                template_values['customer_key'] = self.request.get('customer')
+                self.template_values['customer_key'] = self.request.get('customer')
 
 
-        template_values['invoice'] = invoice
+        self.template_values['invoice'] = invoice
 
-        path = os.path.join(os.path.dirname(__file__), '../template/invoice/edit.html')
-        template_values['content'] = template.render( path, template_values )
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
-        self.response.out.write(template.render(path, template_values))
+        #path = os.path.join(os.path.dirname(__file__), '../template/invoice/edit.html')
+        #template_values['content'] = template.render( path, template_values )
+        #path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
+        #self.response.out.write(template.render(path, template_values))
 
     def mailAction( self, key ):
-        template_values = {}
+        #template_values = {}
         account = Account().current()
 
         output = StringIO.StringIO()

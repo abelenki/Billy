@@ -1,3 +1,4 @@
+{% if customer_list %}
 <a id="context-add" class="button" href="/customer/add/">add customer</a>
 <div id="list-box">
     <table id="list-content">
@@ -20,3 +21,10 @@
         {% endfor %}
     </table>
 </div>
+{%else%}
+<div class="notice">
+    <a id="context-add" class="button" href="/customer/add/">add customer</a>
+    <h4>There are no customers yet</h4>
+    <p><a href="/customer/add/">add</a> a new customer</p>
+</div>
+{%endif%}

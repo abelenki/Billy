@@ -1,3 +1,7 @@
+{% if notice %}
+    <div class="notice">{{notice}}</div>
+{% endif %}
+{% if invoices %}
 <a id="context-add" class="button" href="/invoice/edit/">add invoice</a>
 <div id="list-box">
     <ul id="list-tabs">
@@ -28,3 +32,4 @@
         {% endfor %}
     </table>
 </div>
+{% endif %}

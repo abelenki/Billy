@@ -75,7 +75,7 @@ class Customer( db.Model ):
     address     = db.StringProperty( multiline=True )
 
     def invoices( self ):
-        return  Invoice.gql("WHERE customer = :1", self)
+        return Invoice.gql("WHERE customer = :1", self).fetch(100)
 
     def fullname(self,fmt="{surname}, {firstname}"):
         return '%s, %s' % ( self.surname, self.firstname )
