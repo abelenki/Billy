@@ -49,7 +49,7 @@ class Controller( webapp.RequestHandler ):
             if not key:
                 invoice = Invoice()
                 invoice.company = db.get( self.request.get( 'company' ) );
-                log.text = "save: created new invoice '%s'" % self.request.get('description')
+                log.text = "save: created new invoice '%s'" % self.request.get('description').replace("\n", " ")
 
                 #invoice.customer = db.get( self.request.get( 'customer' ) );
             else:
@@ -57,14 +57,15 @@ class Controller( webapp.RequestHandler ):
                 log.text = "save: saved '%s'" % invoice.description
 
             invoice.customer = db.get( self.request.get( 'customer' ) );
-            invoice.description = self.request.get( 'description' );
+            invoice.description = self.request.get('description').replace("\n", "").strip()
 
             if key:
+                #print self.request.get( 'is_payed')
                 if self.request.get('is_payed'):
                     log.text = "save: marked invoice payed"
                     #print self.request.get('is_payed')
                     #return
-                    #invoice.is_payed = True
+                    invoice.is_payed = True
                     invoice.payed = datetime.now()
                 else:
                     log.text = "save: unmarked invoice payed"
