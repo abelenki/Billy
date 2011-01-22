@@ -18,6 +18,7 @@ class Controller( webapp.RequestHandler ):
         if key:
             company = Company.get(key)
             company.billnr_template = self.request.get('billnr_template')
+            company.billnr_start = int(self.request.get('billnr_start'))
             company.city         = self.request.get('city')
             company.postcode      = self.request.get('postcode')
             company.address      = self.request.get('address')

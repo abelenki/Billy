@@ -18,6 +18,31 @@ indexes:
 - kind: Invoice
   properties:
   - name: account
+  - name: is_billed
+  - name: billed
+
+- kind: Invoice
+  properties:
+  - name: account
+  - name: is_billed
+  - name: created
+
+- kind: Invoice
+  properties:
+  - name: account
+  - name: is_billed
+  - name: is_payed
+  - name: billed
+
+- kind: Invoice
+  properties:
+  - name: account
+  - name: is_payed
+  - name: billed
+
+- kind: Invoice
+  properties:
+  - name: account
   - name: payed
 
 - kind: Invoice
@@ -30,3 +55,9 @@ indexes:
   properties:
   - name: company
   - name: bill_number
+
+- kind: Invoice
+  properties:
+  - name: is_billed
+  - name: is_payed
+  - name: billed

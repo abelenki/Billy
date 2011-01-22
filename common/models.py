@@ -10,6 +10,10 @@ class Account( db.Model ):
     def get_current( self ):
         return Account.current()
 
+    def current_mail( self ):
+        return users.get_current_user().email()
+        #print Account.current().email()
+
     def current(self):
         user = users.get_current_user()
 
@@ -56,7 +60,7 @@ class Company( db.Model ):
     city            = db.StringProperty( multiline=False )
     country         = db.StringProperty( multiline=False )
     billnr_template = db.StringProperty(multiline=False,default='%Y%%05d')
-    billnr_start    = db.IntegerProperty(default=0)
+    billnr_start    = db.IntegerProperty(default=1)
     payment_term    = db.IntegerProperty(default=16)
     vat             = db.FloatProperty( default=0.19 )
     logo            = db.BlobProperty()
@@ -180,8 +184,12 @@ class Invoice( db.Model ):
     created     = db.DateTimeProperty( auto_now_add=True )
     payed       = db.DateTimeProperty()
     bill_number = db.StringProperty( multiline=False)
-    is_payed    = db.BooleanProperty()
-    is_billed   = db.BooleanProperty()
+    is_payed    = db.BooleanProperty(default=False)
+    is_billed   = db.BooleanProperty(default=False)
+
+    def total( self ):
+        total = sum( line.amount for line in self.invoice_lines() );
+        return total
 
     def invoice_logs( self ):
         return InvoiceLog.gql("WHERE invoice = :1", self.key())
@@ -194,11 +202,14 @@ class Invoice( db.Model ):
             if self.billed == None:
                 return None
             else:
-                num = Invoice.gql('WHERE company = :1 AND bill_number != NULL', self.company).count()+1 # ('-bill_number').get().bill_number + 1
-                num = self.company.billnr_start + num
+                num = int(self.company.billnr_start);
+
+                self.company.billnr_start += 1;
+                self.company.put();
+
                 num = time.strftime(self.company.billnr_template) % num
                 self.bill_number = num;
-                self.put()
+                self.put();
 
         return self.bill_number
 

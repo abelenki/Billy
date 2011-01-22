@@ -77,7 +77,11 @@ class Controller( webapp.RequestHandler ):
 
                 if self.request.get( 'is_billed' ):
                     #log.text = "save: set invoice to billed"
-                    invoice.billed = datetime.now()
+                    invoice.billed    = datetime.now()
+                    invoice.is_billed = True
+                else:
+                    invoice.is_billed = False
+                    invoice.billed    = None
 
                 if self.request.get( 'billed' ):
                     invoice.billed = datetime.strptime( self.request.get('billed'), '%Y-%m-%d')
@@ -134,16 +138,17 @@ class Controller( webapp.RequestHandler ):
         gql = []
 
         tab = self.request.get('tab')
-
-        if tab == 'overdue':
-            invoices = Invoice.gql('where billed < :1 and billed != null and account = :2 order by billed asc', (datetime.now() - timedelta(16)), account)
+        if tab == 'all':
+            invoices = Invoice.gql('where account = :1 order by billed asc', account )
         elif tab == 'billed':
-            invoices = Invoice.gql('where billed != null and payed = null and account = :1 order by billed asc', account)
+            invoices = Invoice.gql('where account = :1 and is_billed = true and is_payed = false order by billed asc', account)
         elif tab == 'payed':
             invoices = Invoice.gql('where payed != null and account = :1 order by payed asc', account)
+        elif tab == 'billable':
+            invoices = Invoice.gql('where account = :1 and is_billed = False order by created', account)
         else:
-            tab = 'all'
-            invoices = Invoice.gql('where account = :1 order by billed asc', account )
+            tab = 'overdue'
+            invoices = Invoice.gql( 'where account = :1 and is_billed = True and is_payed = False and billed < :2 order by billed asc', account,(datetime.now() - timedelta(16)))
 
         self.template_values['tab']      = tab
         self.template_values['invoices'] = invoices
@@ -204,34 +209,35 @@ class Controller( webapp.RequestHandler ):
         #template_values = {}
         account = Account().current()
 
-        output = StringIO.StringIO()
-        invoice = Invoice.get( urllib.unquote(key) );
-        customer = invoice.customer
+        if account.send_mail:
+            output = StringIO.StringIO()
+            invoice = Invoice.get( urllib.unquote(key) );
+            customer = invoice.customer
 
-        invoice = Invoice.get( urllib.unquote(key) )
-        invoice_render = render.Invoice( invoice, output )
+            invoice = Invoice.get( urllib.unquote(key) )
+            invoice_render = render.Invoice( invoice, output )
 
 
-        filename = "%s_%s-%s.pdf" % (
-            invoice.customer.firstname.replace(' ', '_'),
-            invoice.customer.surname.replace(' ', '_'),
-            invoice.billing_number()
-        )
+            filename = "%s_%s-%s.pdf" % (
+                invoice.customer.firstname.replace(' ', '_'),
+                invoice.customer.surname.replace(' ', '_'),
+                invoice.billing_number()
+            )
 
-        invoice_render.save()
+            invoice_render.save()
 
-        mail.send_mail(
-            sender=invoice.company.email,
-            to="%s <%s>" % ( customer.fullname(), customer.email ),
-            subject=invoice.description,
-            body=invoice.billing_introduction(),
-            attachments=[(filename,output.getvalue())]
-        )
+            mail.send_mail(
+                sender=invoice.company.email,
+                to="%s <%s>" % ( customer.fullname(), customer.email ),
+                subject=invoice.description,
+                body=invoice.billing_introduction(),
+                attachments=[(filename,output.getvalue())]
+            )
 
-        log = InvoiceLog()
-        log.text = "mail: send invoice per mail to %s" % invoice.company.email
-        log.invoice = invoice
-        log.put()
+            log = InvoiceLog()
+            log.text = "mail: send invoice per mail to %s" % invoice.company.email
+            log.invoice = invoice
+            log.put()
 
         self.redirect('/invoice/list/')
 
@@ -267,7 +273,10 @@ class Controller( webapp.RequestHandler ):
                 invoice.description = "hosting for http://%s.com" % cu.surname.lower()
 
                 if randint(0,2) > 0:
+                    invoice.is_billed = True;
                     invoice.billed = datetime.now() - timedelta(randint(1,40))
+
+
 
                 invoice.put()
 

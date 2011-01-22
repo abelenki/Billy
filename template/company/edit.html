@@ -14,6 +14,7 @@
     {% endif %}
     <form action="/company/save/{{key}}" method="POST" enctype="multipart/form-data">
         <fieldset>
+            <legend>Company details</legend>
         <div>
             <label for="name">
                 Name
@@ -23,16 +24,20 @@
         <div>
             <label for="email">
                 E-mail
-                <input type="text" value="{% if key %}{{company.email}}{%endif%}" name="email" id="email" />
+                <input type="text" value="{% if key %}{{company.email}}{% else %}{{company.account.current_mail}}{%endif%}" name="email" id="email" />
             </label>
         </div>
         <div>
-            <label for="address">
+            <label for="description">
                 Description
                 <textarea id="description" name="description">{% if key %}{{company.description}}{%endif%}</textarea>
             </label>
         </div>
+        <input type="submit" value="Save" name="submit" />
+        </fieldset>
         {% if key %}
+        <fieldset>
+            <legend>Company address</legend>
         <div>
             <label for="postcode">
                 City
@@ -57,6 +62,10 @@
                 <input type="text" value="{% if key %}{{company.country}}{%endif%}" name="country" id="country" />
             </label>
         </div>
+        <input type="submit" value="Save" name="submit" />
+        </fieldset>
+        <fieldset>
+            <legend>bank account, vat</legend>
         <div>
             <label for="bankaccount">
                 Bankaccount
@@ -64,6 +73,28 @@
             </label>
         </div>
         <div>
+        <label for="vat">
+            Vat
+            <input type="text" value="{{company.vat}}" name="vat" id="vat" />
+        </label>
+        </div>
+        <input type="submit" value="Save" name="submit" />
+        </fieldset>
+        <fieldset>
+            <legend>Bill settings</legend>
+        <div>
+        <div>
+        <label for="billnr_template">
+            Billing number template
+            <input type="text" value="{{company.billnr_template}}" name="billnr_template" id="billnr_template" />
+        </label>
+        </div>
+        <div>
+        <label for="billnr_start">
+            next bill index
+            <input type="text" value="{{company.billnr_start}}" name="billnr_start" id="billnr_start" />
+        </label>
+        </div>
         <label for="footer">
             Footer
             <textarea id="footer" name="footer">{{company.footer}}</textarea>
@@ -75,26 +106,24 @@
             <textarea id="introduction" name="introduction">{{company.introduction}}</textarea>
         </label>
         </div>
-        <div>
-        <label for="vat">
-            Vat
-            <input type="text" value="{{company.vat}}" name="vat" id="vat" />
-        </label>
-        </div>
-        <div>
-        <label for="billnr_template">
-            Billing number template
-            <input type="text" value="{{company.billnr_template}}" name="billnr_template" id="billnr_template" />
-        </label>
-        </div>
-        <div>
+        <input type="submit" value="Save" name="submit" />
+        </fieldset>
+        <fieldset>
+            <legend>Company logo</legend>
+            <div>
+            <label for="logo">
+                upload a company logo<br/>
+            </label>
+            <input type="file" value="" name="logo" id="logo" /><br/>
+            </div>
+            <hr/>
+            <div>
             <label for="logo">
                 <img src="/company/logo/{{key}}" alt="upload a new company logo" height="100" />
             </label>
-            <input type="file" value="" name="logo" id="logo" />
-        </div>
-        {% endif %}
+            </div>
         <input type="submit" value="Save" name="submit" />
         </fieldset>
+        {% endif %}
     <form>
 </div>

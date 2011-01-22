@@ -1,15 +1,16 @@
 <a id="context-add" class="button" href="/invoice/edit/">add invoice</a>
 <div id="list-box">
     <ul id="list-tabs">
-        <li {%ifequal tab "all"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=all">all invoices</a></li>
         <li {%ifequal tab "overdue"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=overdue">overdue invoices</a></li>
         <li {%ifequal tab "billed"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=billed">billed invoices</a></li>
+        <li {%ifequal tab "billable"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=billable">billable invoices</a></li>
         <li {%ifequal tab "payed"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=payed">payed invoices</a></li>
+        <li {%ifequal tab "all"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=all">all invoices</a></li>
     </ul>
     <h4><a href="/company/view/{{invoice.company.key}}">{{invoice.company.name}}</a></h4>
 {% if invoice_total %}
     <div class="featured">
-        invoice total: <strong>{{ invoice_total }}</strong> invoice created on <strong>{{invoice.created.date}}</strong>
+        invoice total: <strong>{{ invoice_total }}</strong> invoice created on <strong>{{invoice.created.date}}</strong> invoice number: <strong>{{invoice.billing_number}}</strong>
     </div>
 {% endif %}
     <form class="form-invoice" action="/invoice/save/{{key}}" method="POST" enctype="multipart/form-data">
@@ -42,34 +43,36 @@
 {% if key %}
 
 
+        <input name="is_billed" id="is_billed" type="checkbox" {%if invoice.is_billed%}checked="1"{%endif%} />
+        <label for="is_billed">
+            invoice is billed
+        </label>
+        {% if invoice.is_billed %}
         <div>
-            <input name="is_payed" id="is_payed" type="checkbox" {%if invoice.is_payed%}checked="1"{%endif%} />
-            <label for="is_payed">
-                invoice is payed
-            </label>
-        </div>
-        {% if invoice.is_payed %}
-        <div>
-            <label for="payed">
-                payment date
-            </label>
-            <input id="payed" name="payed" value="{{invoice.payed.date}}" />
-        </div>
-        {% endif %}
-        {% if invoice.billed %}
-        <div>
-            <h5>{{invoice.billing_number}}</h5>
             <label for="billed">
                 billing date
             </label>
             <input id="billed" name="billed" value="{{billed}}" />
         </div>
         {% else %}
-            <input name="is_billed" id="is_billed" type="checkbox" />
-            <label for="is_billed">
-                invoice is billed
-            </label>
         {% endif %}
+        {% if invoice.is_billed %}
+            <div>
+                <input name="is_payed" id="is_payed" type="checkbox" {%if invoice.is_payed%}checked="1"{%endif%} />
+                <label for="is_payed">
+                    invoice is payed
+                </label>
+            </div>
+            {% if invoice.is_payed %}
+            <div>
+                <label for="payed">
+                    payment date
+                </label>
+                <input id="payed" name="payed" value="{{invoice.payed.date}}" />
+            </div>
+            {% endif %}
+        {% endif %}
+
     {% endif %}
         <div>
             <input type="submit" value="Save" name="submit" />
@@ -93,6 +96,8 @@
         </form>
     </div>
     <div id="invoice-lines">
+            <fieldset>
+                <legend>billing lines</legend>
         <!--<table>-->
         <!--    <tr>-->
         <!--        <th>description</th>-->
@@ -118,6 +123,7 @@
         </table>
         </form>
         {% endfor %}
+            </fieldset>
     </div>
     {% if invoice_total %}
         <h5>invoice total: {{ invoice_total }}</h5>
@@ -125,9 +131,11 @@
     <br/>
     {% if invoice.invoice_logs %}
     <strong>invoice history</strong>
+    <div>
     {% for log in invoice.invoice_logs %}
         <div><small>{{log.created}}:{{log.text}}</small></div>
     {% endfor %}
     {% endif %}
+    </div>
 {%endif%}
 </div>
