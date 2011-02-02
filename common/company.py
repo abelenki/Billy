@@ -91,6 +91,7 @@ class Controller( webapp.RequestHandler ):
 
     def listAction( self, company_key ):
         account = Account().current()
+
         #companies = Company.gql('WHERE account = :1', account)
 
         template_values = {}

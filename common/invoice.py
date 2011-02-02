@@ -8,6 +8,10 @@ class Controller( webapp.RequestHandler ):
 
         account = Account().current()
 
+        if action.rstrip('/') == 'render':
+            self.renderAction( key )
+            return
+
         if not account.companies():
             self.template_values['notice'] = """
                 <a id="context-add" class="button" href="/company/add/">add company</a>
@@ -132,33 +136,33 @@ class Controller( webapp.RequestHandler ):
         self.template_values['invoices']  = invoice.invoices(0,10)
 
     def listAction( self, invoice_key ):
-        #template_values = {};
         account = Account().current()
 
         gql = []
 
         tab = self.request.get('tab')
         if tab == 'all':
-            invoices = Invoice.gql('where account = :1 order by billed asc', account )
+            invoices = Invoice.gql('where account = :1 order by billed asc', account.key() )
         elif tab == 'billed':
-            invoices = Invoice.gql('where account = :1 and is_billed = true and is_payed = false order by billed asc', account)
+            invoices = Invoice.gql('where account = :1 and is_billed = true and is_payed = false order by billed asc', account.key())
         elif tab == 'payed':
-            invoices = Invoice.gql('where payed != null and account = :1 order by payed asc', account)
+            invoices = Invoice.gql('where payed != null and account = :1 order by payed asc', account.key() )
         elif tab == 'billable':
-            invoices = Invoice.gql('where account = :1 and is_billed = False order by created', account)
+            invoices = Invoice.gql('where account = :1 and is_billed = False order by created', account.key())
         else:
             tab = 'overdue'
-            invoices = Invoice.gql( 'where account = :1 and is_billed = True and is_payed = False and billed < :2 order by billed asc', account,(datetime.now() - timedelta(16)))
+            invoices = Invoice.gql( '\
+                where account = :1 \
+                and is_billed = True\
+                and is_payed = False\
+                and billed < :2\
+                order by billed asc'
+             , account.key()
+             ,(datetime.now() - timedelta(16)
+            ))
 
         self.template_values['tab']      = tab
         self.template_values['invoices'] = invoices
-
-        #path = os.path.join(os.path.dirname(__file__), '../template/invoice/list.html')
-        #template_values['content'] = template.render( path, template_values )
-        #
-        #path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
-        #self.response.out.write(template.render(path, template_values))
-        #print "hier"
 
     def deleteAction( self, key ):
         invoice = Invoice.get( urllib.unquote(key))
@@ -174,6 +178,7 @@ class Controller( webapp.RequestHandler ):
         account = Account().current()
 
         self.template_values['customers'] = account.customers()
+        #FIXME create loose coupling with account and company
         self.template_values['companies'] = Company.gql('WHERE account = :1', account )
 
         if key:
@@ -243,7 +248,6 @@ class Controller( webapp.RequestHandler ):
 
     def renderAction( self, key ):
         temlate_values = {}
-
 
         invoice = Invoice.get( urllib.unquote(key) )
         invoice_render = render.Invoice( invoice, self.response.out )

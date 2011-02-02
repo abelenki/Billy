@@ -1,0 +1,68 @@
+<a id="context-add" class="button" href="/invoice/edit/">add invoice</a>
+<div id="list-box">
+        <h4>account owner: {{account.user.email}}</h4>
+        {% if account.users.count %}
+        <form method="post">
+        <fieldset>
+            <legend>Account users</legend>
+            <table>
+                <tr>
+                    <th>name</th>
+                    <th>mail</th>
+                    <th>date</th>
+                    <th>actions</th>
+                </tr>
+                {% for au in users %}
+                <tr class="{% cycle uneven,even %}">
+                    <td>{{au.user.nickname}}</td>
+                    <td>{{au.user.email}}</td>
+                    <td>{{au.created.date}}</td>
+                    <td><a href="/user/revoke/{{au.key}}">delete</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+            </legend>
+        </fieldset>
+        </form>
+        {%else%}
+        <div class="featured">
+        <p class="featured">There are no other users using this account. You may invite other users, simply enter their e-mail adress in the form below</p>
+        </div>
+        {%endif%}
+        {% ifequal account.user user %}
+            {% if account.invites.count %}
+            <fieldset>
+                <legend>pending invites:</legend>
+                <table>
+                    <tr>
+                        <th>mail</th>
+                        <th>description</th>
+                        <th>date</th>
+                        <th>actions</th>
+                    </tr>
+                {% for invite in account.invites %}
+                    <tr class="{% cycle uneven,even %}">
+                        <td>{{invite.email}}</td>
+                        <td>{{invite.description}}</td>
+                        <td>{{invite.created.date}}</td>
+                        <td><a href="/user/revoke/{{invite.key}}">delete</a></td></tr>
+                {% endfor %}
+                </table>
+                </legend>
+            </fieldset>
+            {% endif %}
+            <form class="form" action="/user/invite/{{account.key}}" method="POST" enctype="multipart/form-data">
+            <br/>
+            <div>
+                <label for="input-add">Send invitation</label>
+                <input type="text" id="input-add" name="email" value="" />
+                <label for="input-motivation">short motivation</label>
+                <input type="text" id="motivation-add" name="description" value="" />
+                <input type="submit" value="send invites" />
+            </div>
+            <hr/>
+            </form>
+        {%else%}
+        <p class="notice">you are not the owner of this account, and therefore cannot invite others</p>
+        {%endifequal%}
+</div>

@@ -10,6 +10,18 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: AccountUser
+  properties:
+  - name: account
+  - name: user
+
+- kind: AccountUser
+  properties:
+  - name: is_preferred
+  - name: user
+  - name: created
+    direction: desc
+
 - kind: Invoice
   properties:
   - name: account
@@ -55,6 +67,18 @@ indexes:
   properties:
   - name: company
   - name: bill_number
+
+- kind: Invoice
+  properties:
+  - name: company
+  - name: is_billed
+  - name: is_payed
+  - name: billed
+
+- kind: Invoice
+  properties:
+  - name: company
+  - name: payed
 
 - kind: Invoice
   properties:

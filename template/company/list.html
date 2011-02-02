@@ -1,12 +1,10 @@
 {%if companies %}
 <a id="context-add" class="button" href="/company/edit/">add company</a>
 <div id="list-box">
-    <!--<ul id="list-tabs">-->
-    <!--    <li {%ifequal tab "all"%}class="active"{%endifequal%}><a href="/company/list/?tab=all">all companys</a></li>-->
-    <!--    <li {%ifequal tab "overdue"%}class="active"{%endifequal%}><a href="/company/list/?tab=overdue">overdue companys</a></li>-->
-    <!--    <li {%ifequal tab "billed"%}class="active"{%endifequal%}><a href="/company/list/?tab=billed">billed companys</a></li>-->
-    <!--    <li {%ifequal tab "payed"%}class="active"{%endifequal%}><a href="/company/list/?tab=payed">payed companys</a></li>-->
-    <!--</ul>-->
+    <ul id="list-tabs">
+        <li {%ifequal tab "list"%}class="active"{%endifequal%}><a href="/company/list/">all companies</a></li>
+        <li {%ifequal tab "default"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=default">default company</a></li>
+    </ul>
     <table id="list-content">
         <tr>
             <th>name</th>

@@ -1,0 +1,51 @@
+<a id="context-add" class="button" href="/invoice/edit/">add invoice</a>
+<div id="list-box">
+    <ul id="list-tabs">
+    </ul>
+    <form method="post">
+        <fieldset>
+            <legend>available accounts</legend>
+            <table id="list-content">
+                <tr>
+                    <th>preferred</th>
+                    <th>email</th>
+                    <th colspan=2>owner</th>
+                </tr>
+                {% for ac in accounts %}
+                <tr class="{% cycle uneven,even %}">
+                    <td><input type="radio" name="preferred" value="{{ac.key}}" {% if ac.is_preferred %} checked="checked" {%endif%} /></td>
+                    <td>{{ac.user.email}}</td>
+                    <td>{{ac.account.user.email}}</td>
+                    <td><a href="/user/account/{{ac.account.key}}">edit</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        <div>
+            <input type="submit" value="Save changes" />
+        </div>
+        </fieldset>
+    </form>
+        {% if invites.count %}
+    <fieldset>
+        <legend>pending invites:</legend>
+        <table>
+            <tr>
+                <th>mail</th>
+                <th>description</th>
+                <th>date</th>
+                <th>actions</th>
+            </tr>
+        {% for invite in invites %}
+            <tr class="{% cycle uneven,even %}">
+                <td>{{invite.email}}</td>
+                <td>{{invite.description}}</td>
+                <td>{{invite.created.date}}</td>
+                <td><a href="/user/accept/{{invite.key}}">accept</a></td></tr>
+        {% endfor %}
+        </table>
+        </legend>
+    </fieldset>
+    {% endif %}
+
+
+</div>

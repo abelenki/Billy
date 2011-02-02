@@ -16,20 +16,20 @@
             <th>name</th>
             <th>description</th>
             <th colspan="4">actions</th>
-            <th>created</th>
             <th>status</th>
+            <th>bill no</th>
             <th>amount</th>
         </tr>
         {% for invoice in invoices %}
         <tr class="{% cycle uneven,even %}">
             <td>{{invoice.customer.fullname}}</td>
-            <td>{{invoice.description}}</td>
+            <td>{{invoice.description|urlizetrunc:10}}</td>
             <td><a href="/invoice/edit/{{invoice.key}}">edit</a></td>
             <td><a href="/invoice/render/{{invoice.key}}">download</a></td>
             <td><a href="/invoice/mail/{{invoice.key}}">e-mail</a></td>
             <td><a href="/invoice/delete/{{invoice.key}}">delete</a></td>
-            <td>{{invoice.created.date}}</td>
             <td class="due-status-{{invoice.status}}">{{invoice.duedate}}</td>
+            <td>{{invoice.billing_number}}</td>
             <td>{{invoice.total}}
         </tr>
         {% endfor %}

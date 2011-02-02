@@ -1,11 +1,15 @@
 from __init__ import *
 
 class Account( db.Model ):
-    user        = db.UserProperty()
-    send_mail   = db.BooleanProperty(default=False)
+    user            = db.UserProperty()
+    send_mail       = db.BooleanProperty(default=False)
+
     _companies = None
     _customers = None
     _generators = None
+    _invites    = None
+    _users      = None
+
 
     def get_current( self ):
         return Account.current()
@@ -14,17 +18,56 @@ class Account( db.Model ):
         return users.get_current_user().email()
         #print Account.current().email()
 
+    """
+    Retrieves the current account - this is the static factory method
+    for automatically establishing the current Account being used.
+
+    An account can have different users. A user can have different accounts.
+    """
     def current(self):
         user = users.get_current_user()
 
-        current = Account.gql('WHERE user = :1', user ).get()
+        au_list = db.Query(AccountUser).filter(
+            'is_preferred =', True ).filter(
+            'user =', user ).order('-created')
 
-        if not current:
-            current = Account()
-            current.user = user
+        au = au_list.get()
+
+        if au:
+            current = au.account
+        else:
+            current = Account(user=user)
             current.put()
 
+            ac = AccountUser( account=current, user=user );
+            ac.put()
+
         return current
+
+    def users(self):
+        #au_list = db.Query(AccountUser).filter('account =', self.key() )
+
+        if not self._users:
+            self._users = db.Query(AccountUser).filter('account =', self.key() ).filter('user !=', self.user )
+
+        return self._users
+
+        #users = []
+        #
+        #for au in au_list:
+        #
+        #    #logging.debug(au.user.email)
+        #    users.append(au.user)
+        #
+        #return users
+
+    def invites(self):
+        if not self._invites:
+            invites_list = db.Query(AccountInvite).filter('account =', self.key() )
+            self._invites = invites_list
+
+        return self._invites
+
 
     def generators( self ):
         if not self._generators:
@@ -44,6 +87,20 @@ class Account( db.Model ):
             self._companies = Company.gql('WHERE account= :1', self.key() ).fetch(100)
 
         return self._companies
+
+
+class AccountUser( db.Model ):
+    user            = db.UserProperty()
+    account         = db.ReferenceProperty( Account )
+    is_preferred    = db.BooleanProperty(default=True)
+    created         = db.DateTimeProperty(auto_now_add=True)
+
+class AccountInvite( db.Model ):
+    user        = db.UserProperty()
+    account     = db.ReferenceProperty( Account )
+    created     = db.DateTimeProperty(auto_now_add=True)
+    email       = db.EmailProperty()
+    description = db.StringProperty( multiline=True, default='')
 
 
 class Company( db.Model ):
