@@ -1,6 +1,6 @@
 @import url('reset.css');
 
-body{color: #444; font:14px/22px "Lucida Grande", "MS Trebuchet", "Arial", serif;}
+body,textarea,input{color: #444; font:14px/22px "Lucida Grande", "MS Trebuchet", "Arial", serif;}
 a, a:hover, a:visited, a:active{text-decoration:none; color: #4488cc;}
 table{width:100%;}
 td,th{text-align:left;}
@@ -46,7 +46,7 @@ div#footer{width:960px;margin:auto;margin:3em auto;background-color:#fafafa;font
 
 
 /*tabs*/
-#list-tabs{background:#f0f0f0;border:1px solid #f0f0f0; overflow:hidden;line-height:2em;order-radius: 5px; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius:5px 5px 5px 5px;}
+#list-tabs{background:#f0f0f0;border:1px solid #f0f0f0; overflow:hidden;line-height:2em;border-radius: 5px; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius:5px 5px 5px 5px;}
 #list-tabs li{display:inline;overflow:auto;}
 #list-tabs li a{border-radius: 5px; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius:5px 5px 5px 5px;padding:0 1em; display:inline-block;text-shadow:#eef 1px 1px 0px;}
 #list-tabs li.active a{background-color:#fff;}
@@ -89,3 +89,15 @@ tr.uneven,li.uneven{background-color:#f0f0f3;}
 .due-status-5{background-color:#ff8686;}
 
 .notice{margin:1em;padding:1em; background-color: #D1DBED; border: 1px solid #8BA2CC}
+
+/** datepicker **/
+#ui-datepicker-div{
+    padding:0.5em;
+    border: 1px solid #ccc;
+    border-radius: 5px; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius:5px 5px 5px 5px;
+    background-color:#fff;
+    width: 200px;
+}
+
+
+.ui-datepicker-header a{padding:0 0.5em 0 0;}
