@@ -26,7 +26,7 @@
             <td>{{invoice.description|urlizetrunc:10}}</td>
             <td><a href="/invoice/edit/{{invoice.key}}">edit</a></td>
             <td><a href="/invoice/render/{{invoice.key}}">download</a></td>
-            <td><a href="/invoice/mail/{{invoice.key}}">e-mail</a></td>
+            <td><a href="/invoice/mail/{{invoice.key}}?continue={{request.url}}">e-mail</a></td>
             <td><a href="/invoice/delete/{{invoice.key}}">delete</a></td>
             <td class="due-status-{{invoice.status}}">{{invoice.duedate}}</td>
             <td>{{invoice.billing_number}}</td>

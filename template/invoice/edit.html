@@ -52,7 +52,7 @@
             <label for="billed">
                 billing date
             </label>
-            <input id="billed" name="billed" value="{{billed}}" />
+            <input type="date" class="date" id="billed" name="billed" value="{{billed}}" />
         </div>
         {% else %}
         {% endif %}
@@ -68,7 +68,7 @@
                 <label for="payed">
                     payment date
                 </label>
-                <input id="payed" name="payed" value="{{invoice.payed.date}}" />
+                <input class="date" type="date" id="payed" name="payed" value="{{invoice.payed.date}}" />
             </div>
             {% endif %}
         {% endif %}
@@ -138,4 +138,7 @@
     {% endif %}
     </div>
 {%endif%}
+<script>
+($( ".date" ).datepicker({ constrainInput: true, dateFormat: 'yy-mm-dd'});
+</script>
 </div>
