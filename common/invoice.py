@@ -12,6 +12,10 @@ class Controller( webapp.RequestHandler ):
             self.renderAction( key )
             return
 
+        if action.rstrip('/') == 'mail':
+            self.mailAction( key );
+            return
+
         if not account.companies():
             self.template_values['notice'] = """
                 <a id="context-add" class="button" href="/company/add/">add company</a>
@@ -161,6 +165,7 @@ class Controller( webapp.RequestHandler ):
              ,(datetime.now() - timedelta(16)
             ))
 
+        self.template_values['request']      = self.request
         self.template_values['tab']      = tab
         self.template_values['invoices'] = invoices
 
@@ -244,7 +249,7 @@ class Controller( webapp.RequestHandler ):
             log.invoice = invoice
             log.put()
 
-        self.redirect('/invoice/list/')
+        self.redirect(self.request.get("continue", "/"));
 
     def renderAction( self, key ):
         temlate_values = {}
