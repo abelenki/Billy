@@ -85,3 +85,14 @@ indexes:
   - name: is_billed
   - name: is_payed
   - name: billed
+
+- kind: InvoiceLine
+  properties:
+  - name: invoice
+  - name: amount
+
+- kind: InvoiceLine
+  properties:
+  - name: invoice
+  - name: amount
+    direction: desc
