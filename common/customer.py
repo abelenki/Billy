@@ -57,9 +57,6 @@ class Controller( webapp.RequestHandler ):
         template_values['customer'] = customer
 
         path = os.path.join(os.path.dirname(__file__), '../template/customer/view.html')
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
         self.response.out.write(template.render(path, template_values))
 
     def editAction( self, key ):
@@ -71,9 +68,6 @@ class Controller( webapp.RequestHandler ):
         template_values['customer'] = customer
 
         path = os.path.join(os.path.dirname(__file__), '../template/customer/edit.html')
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
         self.response.out.write(template.render(path, template_values))
 
     def addAction( self, customer_key ):
@@ -82,9 +76,6 @@ class Controller( webapp.RequestHandler ):
         #template_values['customer'] = Customer()
 
         path = os.path.join(os.path.dirname(__file__), '../template/customer/edit.html')
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
         self.response.out.write(template.render(path, template_values))
 
     def listAction( self, customer_key ):
@@ -95,9 +86,6 @@ class Controller( webapp.RequestHandler ):
         template_values['customer_list'] = customers
 
         path = os.path.join(os.path.dirname(__file__), '../template/customer/list.html')
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
         self.response.out.write(template.render(path, template_values))
 
     def deleteAction( self, key ):

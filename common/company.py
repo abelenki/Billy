@@ -68,9 +68,6 @@ class Controller( webapp.RequestHandler ):
         template_values['company'] = company
 
         path = os.path.join(os.path.dirname(__file__), '../template/company/edit.html')
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
         self.response.out.write(template.render(path, template_values))
 
     def viewAction( self, key ):
@@ -84,9 +81,6 @@ class Controller( webapp.RequestHandler ):
         #template_values['invoices']  = company.invoices()
 
         path = os.path.join(os.path.dirname(__file__), '../template/company/view.html')
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
         self.response.out.write(template.render(path, template_values))
 
     def listAction( self, company_key ):
@@ -98,9 +92,6 @@ class Controller( webapp.RequestHandler ):
         template_values['companies'] = account.companies()
 
         path = os.path.join(os.path.dirname(__file__), '../template/company/list.html')
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
         self.response.out.write(template.render(path, template_values))
 
     def deleteAction( self, key ):

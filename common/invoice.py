@@ -45,10 +45,8 @@ class Controller( webapp.RequestHandler ):
 
     def renderTemplate( self, action, template_values ):
         path = os.path.join(os.path.dirname(__file__), '../template/invoice/%s.html' % action )
-        self.template_values['content'] = template.render( path, self.template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
-        self.response.out.write(template.render(path, self.template_values))
+        if os.path.exists(path):
+            self.response.out.write(template.render(path, self.template_values))
 
     def saveAction( self, key ):
         if self.request.method == 'POST':
