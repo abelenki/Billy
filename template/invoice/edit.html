@@ -1,4 +1,10 @@
-<a id="context-add" class="button" href="/invoice/edit/">add invoice</a>
+{% extends "../layout.html" %}
+{% block main %}
+
+<a id="context-add" class="button" href="/invoice/delete/{{key}}">delete</a>
+<a id="context-add" class="button" href="/invoice/email/{{key}}">e-mail</a>
+<a id="context-add" class="button" href="/invoice/render/{{key}}">download</a>
+
 <div id="list-box">
     <ul id="list-tabs">
         <li {%ifequal tab "overdue"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=overdue">overdue invoices</a></li>
@@ -142,3 +148,5 @@
 ($( ".date" ).datepicker({ constrainInput: true, dateFormat: 'yy-mm-dd'});
 </script>
 </div>
+{% endblock %}
+

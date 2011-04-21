@@ -1,3 +1,6 @@
+{% extends "../layout.html" %}
+
+{% block main %}
 <a id="context-add" class="button" href="/invoice/edit/?customer={{customer.key}}">add invoice</a>
 <div id="list-box">
     <ul id="list-tabs">
@@ -28,3 +31,4 @@
     <p>{{customer.firstname}} {{customer.surname}} has no invoices yet</p>
     {%endif%}
 </div>
+{% endblock %}

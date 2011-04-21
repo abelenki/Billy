@@ -1,3 +1,7 @@
+{% extends "../layout.html" %}
+
+{% block main %}
+
 {% if notice %}
     <div class="notice">{{notice}}</div>
 {% endif %}
@@ -23,7 +27,7 @@
         {% for invoice in invoices %}
         <tr class="{% cycle uneven,even %}">
             <td>{{invoice.customer.fullname}}</td>
-            <td>{{invoice.description|urlizetrunc:10}}</td>
+            <td>{{invoice.description|truncatewords:3|urlizetrunc:10}}</td>
             <td><a href="/invoice/edit/{{invoice.key}}">edit</a></td>
             <td><a href="/invoice/render/{{invoice.key}}">download</a></td>
             <td><a href="/invoice/mail/{{invoice.key}}?continue={{request.url}}">e-mail</a></td>
@@ -36,3 +40,4 @@
     </table>
 </div>
 {% endif %}
+{% endblock %}

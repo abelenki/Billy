@@ -26,7 +26,8 @@
             <li><a href="/company/list/">companies</a></li>
         </ul>
         <div id="content">
-            {{ content }}
+            {% block main %}
+            {% endblock %}
         </div>
     </div>
     <div id="footer">
@@ -37,11 +38,5 @@
             <li><a href="/company/list/">companies</a></li>
         </ul>
     </div>
-    <script>
-        //$('ul').each( function(i, el){
-        //    //console.log($(el).attr('id'));
-        //    //console.log($(el).attr('class'));
-        //});
-    </script>
 </body>
 </html>

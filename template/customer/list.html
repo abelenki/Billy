@@ -1,3 +1,7 @@
+{% extends "../layout.html" %}
+
+{% block main %}
+
 {% if customer_list %}
 <a id="context-add" class="button" href="/customer/add/">add customer</a>
 <div id="list-box">
@@ -28,3 +32,4 @@
     <p><a href="/customer/add/">add</a> a new customer</p>
 </div>
 {%endif%}
+{% endblock %}

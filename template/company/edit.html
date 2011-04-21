@@ -1,3 +1,7 @@
+{% extends "../layout.html" %}
+
+{% block main %}
+
 {% if key %}
 <a id="context-add" class="button" href="/invoice/edit/?company={{key}}">add invoice</a>
 {% endif %}
@@ -130,3 +134,4 @@
 <script>
 ($( ".date" ).datepicker({ constrainInput: true, dateFormat: 'yy-mm-dd'});
 </script>
+{%endblock%}
