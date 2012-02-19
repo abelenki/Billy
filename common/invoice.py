@@ -217,7 +217,7 @@ class Controller( webapp.RequestHandler ):
         #template_values = {}
         account = Account().current()
 
-        if account.send_mail:
+        if account.send_mail == False: #TODO find a better mechanism to limit e-mail
             output = StringIO.StringIO()
             invoice = Invoice.get( urllib.unquote(key) );
             customer = invoice.customer
@@ -241,6 +241,7 @@ class Controller( webapp.RequestHandler ):
                 body=invoice.billing_introduction(),
                 attachments=[(filename,output.getvalue())]
             )
+
 
             log = InvoiceLog()
             log.text = "mail: send invoice per mail to %s" % invoice.company.email

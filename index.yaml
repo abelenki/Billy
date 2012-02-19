@@ -12,11 +12,6 @@ indexes:
 
 - kind: AccountUser
   properties:
-  - name: account
-  - name: user
-
-- kind: AccountUser
-  properties:
   - name: is_preferred
   - name: user
   - name: created
