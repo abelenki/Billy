@@ -1,1 +1,2 @@
-billy.komodoproject
+*.komodoproject
+*.pyc

@@ -1,11 +1,13 @@
 from __init__ import *
-#from common.models import generator, Invoice, Generator
 from common.models import *
 
 class Controller( webapp.RequestHandler ):
+
     def get( self, action, key = None ):
+        self.template_values = {}
+        account = Account().current()
+
         if key and action in ['edit', 'save']:
-            account = Account().current()
             generator = Generator.get(key)
             if account.key() != generator.account.key():
                 self.accessForbidden()
@@ -13,6 +15,8 @@ class Controller( webapp.RequestHandler ):
         if hasattr( self, "%sAction" % action.rstrip('/')):
             method = getattr( self, "%sAction" % action )
             method( key )
+
+        self.renderTemplate( action, self.template_values )
 
     def post( self, action, key = None ):
         if key and action in ['edit', 'save']:
@@ -24,6 +28,11 @@ class Controller( webapp.RequestHandler ):
         if hasattr( self, "%sAction" % action.rstrip('/')):
             method = getattr( self, "%sAction" % action )
             method( key )
+
+    def renderTemplate( self, action, template_values ):
+        path = os.path.join(os.path.dirname(__file__), '../template/generator/%s.html' % action )
+        if os.path.exists(path):
+            self.response.out.write(template.render(path, self.template_values))
 
     def accessForbidden( self ):
         self.response.out.write( 'You do not own that account')
@@ -77,31 +86,23 @@ class Controller( webapp.RequestHandler ):
         self.redirect('/generator/edit/%s' % generator.key() )
 
     def editAction( self, key ):
-        template_values = {};
-
         account = Account().current()
 
-        template_values['customers'] = account.customers()
-        template_values['companies'] = account.companies()
-        template_values['last_run']  = "never";
+        self.template_values['customers'] = account.customers()
+        self.template_values['companies'] = account.companies()
+        self.template_values['last_run']  = "never";
 
         if key:
             generator = Generator.get( key )
-            template_values['key'] = key
+            self.template_values['key'] = key
         else:
             generator = Generator()
 
         if generator.lastrun:
             delta = datetime.today() - generator.lastrun
-            template_values['last_run'] = "%d days ago" % delta.days
+            self.template_values['last_run'] = "%d days ago" % delta.days
 
-        template_values['generator'] = generator
-
-        path = os.path.join(os.path.dirname(__file__), '../template/generator/edit.html')
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
-        self.response.out.write(template.render(path, template_values))
+        self.template_values['generator'] = generator
 
     def deleteAction( self, key ):
         #lazy delete: should check if everything is cleaned up
@@ -123,17 +124,8 @@ class Controller( webapp.RequestHandler ):
 
 
     def listAction( self, key ):
-        template_values = {}
         account = Account().current()
-
-        template_values['generators'] = account.generators()
-
-        path = os.path.join(os.path.dirname(__file__), '../template/generator/list.html')
-
-        template_values['content'] = template.render( path, template_values )
-
-        path = os.path.join(os.path.dirname(__file__), '../template/layout.html')
-        self.response.out.write(template.render(path, template_values))
+        self.template_values['generators'] = account.generators()
 
     def addlineAction( self, key):
         generator = Generator.get(urllib.unquote(key))
