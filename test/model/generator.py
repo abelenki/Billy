@@ -53,14 +53,12 @@ class TestModelGenerator(unittest.TestCase):
         settings,
         ):
 
-        date_start = datetime.today() \
-            - relativedelta(months=settings['months'],
-                            weeks=settings['weeks'],
-                            days=settings['days'])
+        date_start = datetime.today() - relativedelta(months=settings['months'
+                ], weeks=settings['weeks'], days=settings['days'])
 
         gen = self.get_random_generator(start=date_start, unit=unit,
-                interval=interval)
-        
+                                        interval=interval)
+
         gen.run()
         return gen
 
@@ -75,9 +73,8 @@ class TestModelGenerator(unittest.TestCase):
 
     def test_generator_run(self):
         default = {'days': 0, 'weeks': 0, 'months': 0}
-
-        intervals = {'days': (10, 3, 3), 'weeks': (7, 2, 3),
-                     'months': (10, 3, 3)}
+        intervals = {'days': (10, 3, 3), 'weeks': (7, 2, 3), 'months': (10, 3,
+                     3)}
 
         for unit in iter(intervals):
             (offset, interval, expected_count) = intervals[unit]
@@ -86,10 +83,11 @@ class TestModelGenerator(unittest.TestCase):
 
             gen = self.run_generator(unit, interval, settings)
 
-            self.assertEqual(gen.count, expected_count,
-                'run counter is %d' % expected_count)
+            self.assertEqual(gen.count, expected_count, 'run counter is %d'
+                             % expected_count)
 
             invoices = GeneratorInvoice.gql('WHERE generator = :1', gen.key())
             self.assertEqual(invoices.count(), expected_count,
-                'exactly %d invoices' % expected_count)
+                             'exactly %d invoices' % expected_count)
+
 

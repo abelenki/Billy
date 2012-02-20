@@ -286,7 +286,7 @@ APOST = "'"
 # Old code is parsed.  New code is generated from the parsed version,
 # using these literals:
 
-COL_LIMIT = 80
+COL_LIMIT = 82
 INDENTATION = '    '
 ASSIGNMENT = ' = '
 FUNCTION_PARAM_ASSIGNMENT = '='
