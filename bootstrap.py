@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import os
 import cgi
 import logging
@@ -30,28 +32,27 @@ import common.generator
 import common.invoice
 import common.user
 
-#sys.path.insert(0, 'reportlab.zip')
-#try:
+# sys.path.insert(0, 'reportlab.zip')
+# try:
 #    locale.setlocale(1, ('nl_NL', 'UTF8'))
-#except:
+# except:
 #    logging.error("Unable to set locale at this point")
 #
 
-
 application = webapp.WSGIApplication([
-    ('/company\/?(.*)/(.*)', common.company.Controller ),
-    ('/company\/?(.*)', common.company.Controller ),
-    ('/invoice\/?(.*)/(.*)', common.invoice.Controller ),
-    ('/generator\/?(.*)/(.*)', common.generator.Controller ),
-    ('/customer\/?(.*)/(.*)', common.customer.Controller ),
-    ('/user\/?(.*)/(.*)', common.user.Controller ),
-    ('/?(.*)', common.user.Controller ),
-],debug=True)
-
+    ('/company\/?(.*)/(.*)', common.company.Controller),
+    ('/company\/?(.*)', common.company.Controller),
+    ('/invoice\/?(.*)/(.*)', common.invoice.Controller),
+    ('/generator\/?(.*)/(.*)', common.generator.Controller),
+    ('/customer\/?(.*)/(.*)', common.customer.Controller),
+    ('/user\/?(.*)/(.*)', common.user.Controller),
+    ('/?(.*)', common.user.Controller),
+    ], debug=True)
 
 
 def main():
     run_wsgi_app(application)
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     main()
