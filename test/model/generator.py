@@ -60,6 +60,7 @@ class TestModelGenerator(unittest.TestCase):
 
         gen = self.get_random_generator(start=date_start, unit=unit,
                 interval=interval)
+        
         gen.run()
         return gen
 
@@ -86,8 +87,9 @@ class TestModelGenerator(unittest.TestCase):
             gen = self.run_generator(unit, interval, settings)
 
             self.assertEqual(gen.count, expected_count,
-                             'run counter is %d' % expected_count)
+                'run counter is %d' % expected_count)
 
             invoices = GeneratorInvoice.gql('WHERE generator = :1', gen.key())
             self.assertEqual(invoices.count(), expected_count,
-                             'exactly %d invoices' % expected_count)
+                'exactly %d invoices' % expected_count)
+
