@@ -4,7 +4,9 @@ import logging
 import time
 import locale
 import sys
+
 sys.path.insert(0, 'reportlab.zip')
+
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 

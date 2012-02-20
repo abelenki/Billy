@@ -2,7 +2,7 @@
 #nosetests --with-gae --gae-lib-root=../google_appengine -v
 
 APPENGINE_PATH='../google_appengine'
-TEST_COMMAND="nosetests --with-gae --gae-lib-root=$APPENGINE_PATH -v $1"
+TEST_COMMAND="nosetests --with-gae --gae-lib-root=$APPENGINE_PATH -vv $1"
 
 if [ -z $1 ]
 then

@@ -4,10 +4,14 @@ import logging
 import string
 import time
 import StringIO
+import sys
 
 #import time
 from datetime import datetime
 from datetime import timedelta
+
+sys.path.insert(0, 'vendor')
+from dateutil.relativedelta import relativedelta
 
 from google.appengine.ext import db
 from google.appengine.ext import webapp

@@ -161,44 +161,77 @@ class Generator( db.Model ):
         return GeneratorLine.gql("WHERE generator = :1", self.key())
 
     def run( self ):
+        print 'test'
         if not self.lastrun:
             self.lastrun = self.start
 
+        today = datetime.today();
+        count = 0;
 
-        today = datetime.now()
+        interval = dict(days=0,weeks=0,months=0)
+        interval[self.unit+'s'] = self.interval
 
-        if self.unit == 'month':
-            count = 0
-            while True:
-                month = ( self.lastrun.month + count ) % 12
-                if month == 0: month = 12
-                year  = self.lastrun.year + int(count/12)
-                date = self.lastrun.replace(year=year,month=month)
-                count = count + self.interval
+        while True:
+            invoice_date = self.lastrun + relativedelta(
+                days=interval['days'],
+                weeks=interval['weeks'],
+                months=interval['months']
+            );
 
-                if date.date() < today.date():
-                    #print "date < today", date.date(), today.date()
-                    self.generate_invoice( date )
-                else:
-                    break;
-        else:
-            if self.unit == 'week':
-                delta = timedelta(weeks=self.interval)
-            else:
-                delta = timedelta(days=self.interval)
+            if invoice_date > today:
+                break
 
-            date = self.lastrun
+            self.lastrun = invoice_date
+            self.generate_invoice( invoice_date )
 
-            while True:
-                if date < today:
-                    self.generate_invoice(date)
-                else:
-                    break;
-                date = date + delta
+            count += 1
 
-        self.lastrun = today # last time run
-        self.count = self.count + 1
+        self.count = count
         self.put()
+
+
+
+
+
+
+
+
+        #
+        #
+        #today = datetime.now()
+        #
+        #if self.unit == 'month':
+        #    count = 0
+        #    while True:
+        #        month = ( self.lastrun.month + count ) % 12
+        #        if month == 0: month = 12
+        #        year  = self.lastrun.year + int(count/12)
+        #        date = self.lastrun.replace(year=year,month=month)
+        #        count = count + self.interval
+        #
+        #        if date.date() < today.date():
+        #            #print "date < today", date.date(), today.date()
+        #            self.generate_invoice( date )
+        #        else:
+        #            break;
+        #else:
+        #    if self.unit == 'week':
+        #        delta = timedelta(weeks=self.interval)
+        #    else:
+        #        delta = timedelta(days=self.interval)
+        #
+        #    date = self.lastrun
+        #
+        #    while True:
+        #        if date < today:
+        #            self.generate_invoice(date)
+        #        else:
+        #            break;
+        #        date = date + delta
+        #
+        #self.lastrun = today # last time run
+        #self.count = self.count + 1
+        #self.put()
 
 
     def generate_invoice( self, invoice_date ):

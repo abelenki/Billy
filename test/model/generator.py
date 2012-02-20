@@ -3,11 +3,12 @@ import unittest
 from common.models import *
 from test.support_random import *
 
-
+from datetime import datetime
+from datetime import timedelta
 
 class TestModelGenerator(unittest.TestCase):
     """
-    smoke testing generator
+    smoke testing the billy invoice generator
     """
 
     def setUp(self):
@@ -41,3 +42,11 @@ class TestModelGenerator(unittest.TestCase):
         self.assertTrue( isinstance( gen, Generator ) );
         self.assertTrue( isinstance( gen.account, Account ) );
         self.assertTrue( isinstance( gen.customer, Customer ) );
+
+    def test_generator_run(self):
+        date_start = datetime.today() - timedelta(days=10)
+        gen = Generator.get(self.get_random_generator(start=date_start).key())
+
+        gen.run()
+
+        self.assertEqual( gen.count, 10 )
