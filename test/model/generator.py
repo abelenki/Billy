@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import unittest
@@ -8,9 +8,6 @@ from test.support_random import *
 
 from datetime import datetime
 from datetime import timedelta
-
-# from dateutil.relativedelta import relativedelta
-
 
 class TestModelGenerator(unittest.TestCase):
 
@@ -30,7 +27,7 @@ class TestModelGenerator(unittest.TestCase):
         self,
         interval=1,
         unit='days',
-        start=datetime.now(),
+        start=datetime.today() - timedelta(days=3),
         ):
 
         generator = Generator()
@@ -53,8 +50,8 @@ class TestModelGenerator(unittest.TestCase):
         settings,
         ):
 
-        date_start = datetime.today() - relativedelta(months=settings['months'
-                ], weeks=settings['weeks'], days=settings['days'])
+        date_start = datetime.today() - relativedelta(months=settings['months'],
+                weeks=settings['weeks'], days=settings['days'])
 
         gen = self.get_random_generator(start=date_start, unit=unit,
                                         interval=interval)
@@ -73,8 +70,7 @@ class TestModelGenerator(unittest.TestCase):
 
     def test_generator_run(self):
         default = {'days': 0, 'weeks': 0, 'months': 0}
-        intervals = {'days': (10, 3, 3), 'weeks': (7, 2, 3), 'months': (10, 3,
-                     3)}
+        intervals = {'days': (10, 3, 3), 'weeks': (7, 2, 3), 'months': (10, 3, 3)}
 
         for unit in iter(intervals):
             (offset, interval, expected_count) = intervals[unit]
@@ -90,4 +86,47 @@ class TestModelGenerator(unittest.TestCase):
             self.assertEqual(invoices.count(), expected_count,
                              'exactly %d invoices' % expected_count)
 
+    def test_generator_invoice_lines_run(self):
+        gen = self.get_random_generator()
 
+        line_data = (('Line A', 21), ('Line B', 42), ('Line C', 84))
+
+        for (name, amount) in line_data:
+            line = GeneratorLine()
+            line.generator = gen
+            line.amount = float(amount)
+            line.name = name
+
+            line.put()
+
+        lines = GeneratorLine.gql('WHERE generator = :1', gen.key())
+        self.assertEqual(lines.count(), len(line_data), 'expected amount of lines'
+                         )
+
+        gen.run()
+        generated_invoices = GeneratorInvoice.gql('WHERE generator = :1',
+                gen.key()).fetch(100)
+
+        for generated in generated_invoices:
+            invoice_lines = generated.invoice.invoice_lines()
+            self.assertEqual(invoice_lines.count(), len(line_data))
+
+    def test_generator_invoice_lines_compare(self):
+        gen = self.get_random_generator()
+        line_data = (u'My line description with Fünny chars', 42)
+
+        (description, amount) = line_data
+
+        line = GeneratorLine(generator=gen, amount=float(amount),
+                             name=description)
+        line.put()
+
+        generated_invoices = GeneratorInvoice.gql('WHERE generator = :1',
+                gen.key()).fetch(100)
+
+        for rel in generated_invoices:
+            invoice_lines = rel.invoice.invoice_lines().fetch(100)
+
+            self.assertEqual(len(invoice_lines), 1)
+            self.assertEqual(invoice_lines[0].name, description)
+            self.assertEqual(invoice_lines[0].amount, float(amount))
