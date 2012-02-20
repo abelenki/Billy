@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 from __init__ import *
 
 
@@ -50,15 +51,6 @@ class Account(db.Model):
                     self.key()).filter('user !=', self.user)
 
         return self._users
-
-        # users = []
-        #
-        # for au in au_list:
-        #
-        #    #logging.debug(au.user.email)
-        #    users.append(au.user)
-        #
-        # return users
 
     def invites(self):
         if not self._invites:
@@ -121,8 +113,7 @@ class Company(db.Model):
     postcode = db.StringProperty(multiline=False)
     city = db.StringProperty(multiline=False)
     country = db.StringProperty(multiline=False)
-    billnr_template = db.StringProperty(multiline=False,
-            default='%Y%%05d')
+    billnr_template = db.StringProperty(multiline=False, default='%Y%%05d')
     billnr_start = db.IntegerProperty(default=1)
     payment_term = db.IntegerProperty(default=16)
     vat = db.FloatProperty(default=0.19)
@@ -130,7 +121,8 @@ class Company(db.Model):
 
     footer = db.StringProperty(multiline=True, default='')
     introduction = db.StringProperty(multiline=True,
-            default='Dear $name,\nThis invoice concerns $description')
+                                     default='Dear $name,\nThis invoice concerns $description'
+                                     )
 
     def invoices(self, offset=0, limit=100):
         return Invoice.gql('WHERE company = :1', self.key())
@@ -166,7 +158,7 @@ class Generator(db.Model):
     start = db.DateTimeProperty(auto_now_add=True)
     interval = db.IntegerProperty(default=1)
     count = db.IntegerProperty(default=0)
-    unit = db.StringProperty(multiline=False, default='month')
+    unit = db.StringProperty(multiline=False, default='months')
 
     description = db.StringProperty(multiline=False, default='')
 
@@ -182,13 +174,13 @@ class Generator(db.Model):
         count = 0
 
         interval = dict(days=0, weeks=0, months=0)
-        interval[self.unit + 's'] = self.interval
+        interval[self.unit] = self.interval
+
+        print interval
 
         while True:
-            invoice_date = self.lastrun \
-                + relativedelta(days=interval['days'],
-                                weeks=interval['weeks'],
-                                months=interval['months'])
+            invoice_date = self.lastrun + relativedelta(days=interval['days'],
+                    weeks=interval['weeks'], months=interval['months'])
 
             if invoice_date > today:
                 break
@@ -290,8 +282,8 @@ class Invoice(db.Model):
         return InvoiceLog.gql('WHERE invoice = :1', self.key())
 
     def invoice_lines(self):
-        return InvoiceLine.gql('WHERE invoice = :1 ORDER BY amount DESC'
-                               , self.key())
+        return InvoiceLine.gql('WHERE invoice = :1 ORDER BY amount DESC',
+                               self.key())
 
     def billing_number(self):
         if not self.bill_number:
@@ -313,8 +305,7 @@ class Invoice(db.Model):
         intro = string.Template(self.company.introduction)
 
         values = dict(name='%s %s' % (self.customer.firstname,
-                      self.customer.surname),
-                      description=self.description)
+                      self.customer.surname), description=self.description)
 
         return intro.substitute(values)
 
