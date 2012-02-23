@@ -165,17 +165,14 @@ class Generator(db.Model):
         return GeneratorLine.gql('WHERE generator = :1', self.key())
 
     def run(self):
-        print 'test'
         if not self.lastrun:
             self.lastrun = self.start
 
         today = datetime.today()
-        count = 0
+        count = self.count
 
         interval = dict(days=0, weeks=0, months=0)
         interval[self.unit] = self.interval
-
-        print interval
 
         while True:
             invoice_date = self.lastrun + relativedelta(days=interval['days'],
@@ -193,26 +190,21 @@ class Generator(db.Model):
         self.put()
 
     def generate_invoice(self, invoice_date):
-
-        # print 'generate invoice for %s' % invoice_date.date()
-
-        invoice = Invoice()
-
-        invoice.account = self.account
-        invoice.company = self.company
-        invoice.customer = self.customer
-
-        invoice.description = self.description
-        invoice.created = invoice_date
-
-        invoice.put()
+        invoice = Invoice(
+            account = self.account,
+            company = self.company,
+            cstomer = self.customer,
+            description = self.description,
+            created = invoice_date
+        ).put()
+        
 
         for gen_line in self.lines():
-            line = InvoiceLine()
-            line.invoice = invoice
-            line.name = gen_line.name
-            line.amount = gen_line.amount
-            line.put()
+            InvoiceLine(
+                invoice = invoice,
+                name    = gen_line.name,
+                amount  = gen_line.amount,
+            ).put()
 
         log = GeneratorInvoice(invoice=invoice, generator=self)
         log.put()
