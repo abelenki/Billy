@@ -142,10 +142,6 @@ class Customer(db.Model):
         return '%s, %s' % (self.surname, self.firstname)
 
 
-        # #return "{surname}, {firstname}".format(surname=self.surname,firstname=self.firstname)
-        # return fmt.format(surname=self.surname,firstname=self.firstname)
-
-
 class Generator(db.Model):
 
     account = db.ReferenceProperty(Account, default=Account().current())
@@ -190,21 +186,14 @@ class Generator(db.Model):
         self.put()
 
     def generate_invoice(self, invoice_date):
-        invoice = Invoice(
-            account = self.account,
-            company = self.company,
-            cstomer = self.customer,
-            description = self.description,
-            created = invoice_date
-        ).put()
-        
+        invoice = Invoice(account=self.account, company=self.company,
+                          cstomer=self.customer, description=self.description,
+                          created=invoice_date).put()
 
         for gen_line in self.lines():
-            InvoiceLine(
-                invoice = invoice,
-                name    = gen_line.name,
-                amount  = gen_line.amount,
-            ).put()
+
+            InvoiceLine(invoice=invoice, name=gen_line.name,
+                        amount=gen_line.amount).put()
 
         log = GeneratorInvoice(invoice=invoice, generator=self)
         log.put()

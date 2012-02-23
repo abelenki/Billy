@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import os
 import urllib
 import logging
@@ -6,7 +8,8 @@ import time
 import StringIO
 import sys
 
-#import time
+# import time
+
 from datetime import datetime
 from datetime import timedelta
 
@@ -23,4 +26,6 @@ from google.appengine.api import images
 from google.appengine.api import mail
 
 logging.getLogger().setLevel(logging.DEBUG)
+
 # LOG_FILENAME = '/tmp/debug.log'
+
