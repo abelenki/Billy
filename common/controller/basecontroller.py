@@ -22,7 +22,7 @@ class BaseController(webapp.RequestHandler):
             method(key)
 
     def renderTemplate(self, action, template_values):
-        path = os.path.join(os.path.dirname(__file__), '../template/%s/%s.html'
+        path = os.path.join(os.path.dirname(__file__), '../../template/%s/%s.html'
                             % (self.template_module, action))
 
         if os.path.exists(path):
@@ -38,5 +38,3 @@ class BaseController(webapp.RequestHandler):
         self.response.out.write('You do not own that account')
         self.response.set_status(403)
         exit()
-
-

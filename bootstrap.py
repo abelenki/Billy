@@ -27,9 +27,9 @@ from google.appengine.api import images
 from google.appengine.api import users
 
 import common.company
-import common.customer
+import common.controller.customer
 import common.generator
-import common.invoice
+import common.controller.invoice
 import common.user
 
 # sys.path.insert(0, 'reportlab.zip')
@@ -42,9 +42,9 @@ import common.user
 application = webapp.WSGIApplication([
     ('/company\/?(.*)/(.*)', common.company.Controller),
     ('/company\/?(.*)', common.company.Controller),
-    ('/invoice\/?(.*)/(.*)', common.invoice.Controller),
+    ('/invoice\/?(.*)/(.*)', common.controller.invoice.Controller),
     ('/generator\/?(.*)/(.*)', common.generator.Controller),
-    ('/customer\/?(.*)/(.*)', common.customer.Controller),
+    ('/customer\/?(.*)/(.*)', common.controller.customer.Controller),
     ('/user\/?(.*)/(.*)', common.user.Controller),
     ('/?(.*)', common.user.Controller),
     ], debug=True)
