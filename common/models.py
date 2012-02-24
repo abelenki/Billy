@@ -47,21 +47,21 @@ class Account(db.Model):
         # au_list = db.Query(AccountUser).filter('account =', self.key() )
 
         if not self._users:
-            self._users = db.Query(AccountUser).filter('account =',
+            self._users = db.Query(AccountUser).filter('account=',
                     self.key()).filter('user !=', self.user)
 
         return self._users
 
     def invites(self):
         if not self._invites:
-            invites_list = db.Query(AccountInvite).filter('account =', self.key())
+            invites_list = db.Query(AccountInvite).filter('account=', self.key())
             self._invites = invites_list
 
         return self._invites
 
     def generators(self):
         if not self._generators:
-            self._generators = Generator.gql('WHERE account= :1',
+            self._generators = Generator.gql('WHERE account=:1',
                     self.key()).fetch(100)
 
         return self._generators
@@ -75,7 +75,7 @@ class Account(db.Model):
 
     def companies(self):
         if not self._companies:
-            self._companies = Company.gql('WHERE account= :1',
+            self._companies = Company.gql('WHERE account=:1',
                     self.key()).fetch(100)
 
         return self._companies
@@ -307,5 +307,3 @@ class GeneratorInvoice(db.Model):
     generator = db.ReferenceProperty(Generator)
     invoice = db.ReferenceProperty(Invoice)
     created = db.DateTimeProperty(auto_now_add=True)
-
-

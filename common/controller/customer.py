@@ -9,19 +9,10 @@ class Controller(BaseController):
 
     template_module = 'customer'
 
-    def get(self, action, key=None):
+    def pre_dispatch( self, action, key=None):
         if key:
             customer = Customer.get(key)
             self._check_account(customer.account)
-
-        super(Controller, self).get(action, key)
-
-    def post(self, action, key=None):
-        if key:
-            customer = Customer.get(key)
-            self._check_account(customer.account)
-
-        super(Controller, self).post(action, key)
 
     def saveAction(self, key):
         account = Account().current()
@@ -58,10 +49,6 @@ class Controller(BaseController):
         customers = Customer.gql('WHERE account = :1', account.key()).fetch(100)
 
         self.template_values['customer_list'] = customers
-
-        path = os.path.join(os.path.dirname(__file__),
-                            '../template/customer/list.html')
-        self.response.out.write(template.render(path, self.template_values))
 
     def deleteAction(self, key):
         customer = Customer.get(urllib.unquote(key))

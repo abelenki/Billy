@@ -10,6 +10,7 @@ class BaseController(webapp.RequestHandler):
     template_module = ''
 
     def get(self, action, key=None):
+        self.pre_dispatch( action, key );
         if hasattr(self, '%sAction' % action.rstrip('/')):
             method = getattr(self, '%sAction' % action)
             method(key)
@@ -17,9 +18,13 @@ class BaseController(webapp.RequestHandler):
         self.renderTemplate(action, self.template_values)
 
     def post(self, action, key=None):
+        self.pre_dispatch( action, key );
         if hasattr(self, '%sAction' % action.rstrip('/')):
             method = getattr(self, '%sAction' % action)
             method(key)
+
+    def pre_dispatch( self, action, key=None):
+        pass;
 
     def renderTemplate(self, action, template_values):
         path = os.path.join(os.path.dirname(__file__), '../../template/%s/%s.html'

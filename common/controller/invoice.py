@@ -30,7 +30,6 @@ class Controller(BaseController):
                 <h4><strong>You did not create a company yet!</strong></h4>
                 <p>You should really go and create a company <em><a href='/company/add/'>now</a></em> ;-)</p>
             """
-            action = 'list'
         elif not account.customers():
             self.template_values['notice'] = \
                 """
@@ -38,7 +37,6 @@ class Controller(BaseController):
                 <h4><strong>No customers found!</strong></h4>
                 <p>We strongly suggest you get one <strong><a href='/customer/add/'>now</a></strong> ;-)</p>
             """
-            action = 'list'
 
         return super(Controller, self).get(action, key)
 
