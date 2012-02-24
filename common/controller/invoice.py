@@ -5,7 +5,7 @@ from __init__ import *
 from common.models import *
 from common import render
 
-from basecontroller import BaseController
+from base import BaseController
 
 
 class Controller(BaseController):
@@ -299,5 +299,3 @@ class Controller(BaseController):
 
                 self.response.out.write('<div>wrote %s, %s</div>'
                                         % (invoice.description, co.name))
-
-

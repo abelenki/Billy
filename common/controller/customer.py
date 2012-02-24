@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from __init__ import *
 from common.models import *
-from basecontroller import BaseController
+from base import BaseController
 
 
 class Controller(BaseController):
@@ -129,5 +129,3 @@ Lou Sends"""
                                     cs.email))
 
             cs.put()
-
-
