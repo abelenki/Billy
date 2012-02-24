@@ -68,7 +68,7 @@ class Account(db.Model):
 
     def customers(self):
         if not self._customers:
-            self._customers = Customer.gql('WHERE account= :1',
+            self._customers = Customer.gql('WHERE account=:1',
                     self.key()).fetch(100)
 
         return self._customers
