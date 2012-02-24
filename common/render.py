@@ -14,7 +14,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.pdfgen import canvas
 ##from pdfmetrics import standardEncodings
 #
-#from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase import pdfmetrics
 
 
 from reportlab.lib.pagesizes import letter
