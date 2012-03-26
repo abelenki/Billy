@@ -229,8 +229,9 @@ class Invoice(db.Model):
         return InvoiceLog.gql('WHERE invoice = :1', self.key())
 
     def invoice_lines(self):
-        return InvoiceLine.gql('WHERE invoice = :1 ORDER BY amount DESC',
-                               self.key())
+        if self.key():
+            return InvoiceLine.gql('WHERE invoice = :1 ORDER BY amount DESC',
+                                   self.key())
 
     def billing_number(self):
         if not self.bill_number:
@@ -286,6 +287,7 @@ class InvoiceLine(db.Model):
     modified = db.DateTimeProperty(auto_now=True)
     name = db.StringProperty(multiline=False)
     amount = db.FloatProperty()
+    vat_percentage = db.FloatProperty()
 
 
 class InvoiceLog(db.Model):
@@ -307,3 +309,5 @@ class GeneratorInvoice(db.Model):
     generator = db.ReferenceProperty(Generator)
     invoice = db.ReferenceProperty(Invoice)
     created = db.DateTimeProperty(auto_now_add=True)
+
+

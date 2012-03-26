@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 from __init__ import *
 
 from common.models import *
@@ -28,14 +29,14 @@ class Controller(BaseController):
                 """
                 <a id="context-add" class="button" href="/company/add/">add company</a>
                 <h4><strong>You did not create a company yet!</strong></h4>
-                <p>You should really go and create a company <em><a href='/company/add/'>now</a></em> ;-)</p>
+                <p>You should really go and create a company <em><a href='/company/edit/'>now</a></em> ;-)</p>
             """
         elif not account.customers():
             self.template_values['notice'] = \
                 """
-                <a id="context-add" class="button" href="/customer/add/">add customer</a>
+                <a id="context-add" class="button" href="/customer/edit/">add customer</a>
                 <h4><strong>No customers found!</strong></h4>
-                <p>We strongly suggest you get one <strong><a href='/customer/add/'>now</a></strong> ;-)</p>
+                <p>We strongly suggest you get one <strong><a href='/customer/edit/'>now</a></strong> ;-)</p>
             """
 
         return super(Controller, self).get(action, key)
@@ -297,3 +298,5 @@ class Controller(BaseController):
 
                 self.response.out.write('<div>wrote %s, %s</div>'
                                         % (invoice.description, co.name))
+
+
