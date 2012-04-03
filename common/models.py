@@ -226,12 +226,17 @@ class Invoice(db.Model):
         return total
 
     def invoice_logs(self):
+        if not self.is_saved():
+            return
+
         return InvoiceLog.gql('WHERE invoice = :1', self.key())
 
     def invoice_lines(self):
-        if self.key():
-            return InvoiceLine.gql('WHERE invoice = :1 ORDER BY amount DESC',
-                                   self.key())
+        if not self.is_saved():
+            return
+
+        return InvoiceLine.gql('WHERE invoice = :1 ORDER BY amount DESC',
+                               self.key())
 
     def billing_number(self):
         if not self.bill_number:
