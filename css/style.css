@@ -131,5 +131,8 @@ ul.hnav li a{color:#444; padding:0 1em; display:inline;text-shadow:#eee 1px 1px 
     width: 200px;
 }
 
+.pager { padding: 1em 1em; }
+.float-left { float: left; }
+.float-right { float: right; }
 
 .ui-datepicker-header a{padding:0 0.5em 0 0;}
