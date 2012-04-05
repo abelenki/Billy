@@ -212,14 +212,14 @@ class Invoice(db.Model):
     company = db.ReferenceProperty(Company)
     customer = db.ReferenceProperty(Customer)
 
-    description = db.StringProperty(multiline=False, default='')
     billed = db.DateTimeProperty()
-    modified = db.DateTimeProperty(auto_now=True)
-    created = db.DateTimeProperty(auto_now_add=True)
-    payed = db.DateTimeProperty()
     bill_number = db.StringProperty(multiline=False)
-    is_payed = db.BooleanProperty(default=False)
+    created = db.DateTimeProperty(auto_now_add=True)
+    description = db.StringProperty(multiline=False, default='')
     is_billed = db.BooleanProperty(default=False)
+    is_payed = db.BooleanProperty(default=False)
+    modified = db.DateTimeProperty(auto_now=True)
+    payed = db.DateTimeProperty()
 
     def total(self):
         total = sum(line.amount for line in self.invoice_lines())
@@ -292,7 +292,7 @@ class InvoiceLine(db.Model):
     modified = db.DateTimeProperty(auto_now=True)
     name = db.StringProperty(multiline=False)
     amount = db.FloatProperty()
-    vat_percentage = db.FloatProperty()
+    vat = db.FloatProperty()
 
 
 class InvoiceLog(db.Model):
