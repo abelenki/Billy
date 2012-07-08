@@ -221,4 +221,3 @@ class Controller(BaseController):
                         )
 
         self.template_values['invoice'] = invoice
-
