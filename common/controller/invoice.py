@@ -19,11 +19,11 @@ class Controller(BaseController):
         account = Account().current()
 
         if action.rstrip('/') == 'render':
-            self.renderAction(key)
+            self.render_action(key)
             return
 
         if action.rstrip('/') == 'mail':
-            self.mailAction(key)
+            self.mail_action(key)
             return
 
         if not account.companies():
@@ -43,7 +43,7 @@ class Controller(BaseController):
 
         return super(Controller, self).get(action, key)
 
-    def saveAction(self, key):
+    def save_action(self, key):
         if self.request.method == 'POST':
             log = InvoiceLog()
 
@@ -96,7 +96,7 @@ class Controller(BaseController):
             log.put()
             self.redirect('/invoice/edit/%s' % invoice.key())
 
-    def addlineAction(self, key):
+    def addline_action(self, key):
         invoice = Invoice.get(key)
         self._check_account(invoice.account)
 
@@ -109,7 +109,7 @@ class Controller(BaseController):
         except ValueError, error:
             self.redirect('/invoice/edit/%s?error=%s' % (key, error))
 
-    def savelineAction(self, key):
+    def saveline_action(self, key):
         line = InvoiceLine.get(key)
 
         self._check_account(line.invoice.account)
@@ -121,7 +121,7 @@ class Controller(BaseController):
 
         self.redirect('/invoice/edit/%s' % line.invoice.key())
 
-    def dellineAction(self, key):
+    def delline_action(self, key):
         line = InvoiceLine.get(key)
 
         self._check_account(line.invoice.account)
@@ -131,7 +131,7 @@ class Controller(BaseController):
 
         self.redirect('/invoice/edit/%s' % invoice.key())
 
-    def viewAction(self, key):
+    def view_action(self, key):
         invoice = db.get(key)
 
         self._check_account(invoice.account)
@@ -140,7 +140,7 @@ class Controller(BaseController):
         self.template_values['customers'] = invoice.account.customers()
         self.template_values['invoices'] = invoice.invoices(0, 10)
 
-    def listAction(self, invoice_key):
+    def list_action(self, invoice_key):
         account = Account().current()
 
         gql = []
@@ -180,7 +180,7 @@ class Controller(BaseController):
         self.template_values['pager'] = pager
         self.template_values['tab'] = tab
 
-    def deleteAction(self, key):
+    def delete_action(self, key):
         invoice = Invoice.get(urllib.unquote(key))
         self._check_account(invoice.account)
 
@@ -190,7 +190,7 @@ class Controller(BaseController):
         invoice.delete()
         self.redirect('/invoice/list/')
 
-    def editAction(self, key):
+    def edit_action(self, key):
         account = Account().current()
 
         self.template_values['customers'] = account.customers()

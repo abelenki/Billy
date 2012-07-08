@@ -14,7 +14,7 @@ class Controller(BaseController):
             customer = Customer.get(key)
             self._check_account(customer.account)
 
-    def saveAction(self, key):
+    def save_action(self, key):
         account = Account().current()
 
         if key:
@@ -31,26 +31,26 @@ class Controller(BaseController):
         customer.put()
         self.redirect('/customer/edit/%s' % customer.key())
 
-    def viewAction(self, key):
+    def view_action(self, key):
         account = Account().current()
         customer = db.get(key)
 
         self.template_values['customer'] = customer
 
-    def editAction(self, key):
+    def edit_action(self, key):
         account = Account().current()
 
         if key:
             customer = db.get(key)
             self.template_values['customer'] = customer
 
-    def listAction(self, customer_key):
+    def list_action(self, customer_key):
         account = Account().current()
         customers = Customer.gql('WHERE account = :1', account.key()).fetch(100)
 
         self.template_values['customer_list'] = customers
 
-    def deleteAction(self, key):
+    def delete_action(self, key):
         customer = Customer.get(urllib.unquote(key))
         account = Account().current()
 
@@ -62,7 +62,7 @@ class Controller(BaseController):
                 self.response.out.write('<div>you cannot delete a customer that has invoices <a href="/customer/list/>back</a></div>'
                                         )
 
-    def generateAction(self, key):
+    def generate_action(self, key):
         names = \
             """Bill Due
 Ernest Desire

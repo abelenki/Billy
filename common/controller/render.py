@@ -15,7 +15,7 @@ class Controller(BaseController):
 
     template_module = 'invoice'
 
-    def mailAction(self, key):
+    def mail_action(self, key):
     
         # template_values = {}
     
@@ -50,7 +50,7 @@ class Controller(BaseController):
     
         self.redirect(self.request.get('continue', '/'))
     
-    def invoiceAction(self, key):
+    def invoice_action(self, key):
         temlate_values = {}
     
         invoice = Invoice.get(urllib.unquote(key))

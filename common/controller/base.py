@@ -12,16 +12,16 @@ class BaseController(webapp.RequestHandler):
 
     def get(self, action, key=None):
         self.pre_dispatch(action, key)
-        if hasattr(self, '%sAction' % action.rstrip('/')):
-            method = getattr(self, '%sAction' % action)
+        if hasattr(self, '%s_action' % action.rstrip('/')):
+            method = getattr(self, '%s_action' % action)
             method(key)
 
         self.renderTemplate(action, self.template_values)
 
     def post(self, action, key=None):
         self.pre_dispatch(action, key)
-        if hasattr(self, '%sAction' % action.rstrip('/')):
-            method = getattr(self, '%sAction' % action)
+        if hasattr(self, '%s_action' % action.rstrip('/')):
+            method = getattr(self, '%s_action' % action)
             method(key)
 
     def pre_dispatch(self, action, key=None):

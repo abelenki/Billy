@@ -14,7 +14,7 @@ class Controller(BaseController):
         else:
             self.company = Company()
 
-    def saveAction( self, key ):
+    def save_action( self, key ):
         for key, prop in Company.properties().items():
             value = self.request.get(key)
 
@@ -40,20 +40,20 @@ class Controller(BaseController):
         self.company.put()
         self.redirect('/company/edit/%s' % self.company.key() )
 
-    def logoAction( self, key ):
+    def logo_action( self, key ):
         self.response.headers['Content-Type'] = 'image/jpg'
         self.response.headers['Content-Disposition'] = 'attachment; filename=logo.jpg'
         self.response.out.write( self.company.logo )
 
-    def editAction( self, key ):
+    def edit_action( self, key ):
         if self.company:
             self.template_values['key']        = key
         self.template_values['company'] = self.company
 
-    def listAction( self, company_key ):
+    def list_action( self, company_key ):
         self.template_values['companies'] =  Account().current().companies()
 
-    def deleteAction( self, key ):
+    def delete_action( self, key ):
         if self.company.invoices().count() > 0:
             self.response.out.write("company has invoices, delete those first")
             return
