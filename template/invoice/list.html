@@ -4,8 +4,7 @@
 
 {% if notice %}
     <div class="notice">{{notice}}</div>
-{% endif %}
-{% if invoices %}
+{% else %}
 <a id="context-add" class="button" href="/invoice/edit/">add invoice</a>
 <div id="list-box">
     <ul id="list-tabs">
@@ -15,6 +14,7 @@
         <li {%ifequal tab "payed"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=payed">payed invoices</a></li>
         <li {%ifequal tab "all"%}class="active"{%endifequal%}><a href="/invoice/list/?tab=all">all invoices</a></li>
     </ul>
+{% if invoices %}
     <div class="pager">
         {% if pager.prev %}
         <div class="float-left third"><a href="?tab={{ tab }}&first={{ pager.first }}&page={{ pager.prev }}">&laquo; previous</a></div>
@@ -46,6 +46,7 @@
         </tr>
         {% endfor %}
     </table>
+{% endif %}
 </div>
 {% endif %}
 {% endblock %}
