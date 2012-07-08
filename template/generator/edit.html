@@ -3,19 +3,21 @@
 <a id="context-add" class="button" href="/generator/edit/">add generator</a>
 <div id="list-box">
     <ul id="list-tabs">
-        <li class="active"><a href="/generator/edit/{%if key%}{{generator.key}}{%endif%}">edit generator</a></li>
+        <li class="active"><a href="/generator/edit/{%if generator.is_saved %}{{  generator.key }}{%endif%}">edit generator</a></li>
         <li class=""><a href="/generator/list/">generators</a></li>
     </ul>
-    <h4>{%if key%} Editing {{generator.description}}{%else%}Adding generator{%endif%}</h4>
-    {%if key %}{%if generator.lines.count %}
-    <div class="featured">
-        This generator was ran <strong>{{last_run}}</strong>. <a href="/generator/run/{{key}}">run generator now</a>
-    </div>
-    {%endif%}{%endif%}
-    <form action="/generator/save/{{key}}" method="POST" enctype="multipart/form-data">
+    <h4>{%if generator.is_saved%} Editing {{generator.description}}{%else%}Adding generator{%endif%}</h4>
+    {%if generator.is_saved %}
+        {%if generator.lines.count %}
+        <div class="featured">
+            This generator was ran <strong>{{last_run}}</strong>. <a href="/generator/run/{{generator.key}}">run generator now</a>
+        </div>
+        {%endif%}
+    {%endif%}
+    <form action="/generator/save/{% if generator.is_saved %}{{generator.key}}{% endif %}" method="POST" enctype="multipart/form-data">
         <fieldset>
             <legend>Account details for {{generator.description}}</legend>
-            {% if key %}
+            {% if generator.is_saved %}
                 <h5>Generator for <a href="/company/edit/{{generator.company.key}}">{{generator.customer.fullname}}</a> by <a href="/company/edit/{{generator.company.key}}">{{generator.company.name}}</a></h5>
                 <dl>
             {% else %}
@@ -59,7 +61,7 @@
                 </label>
             </dt>
             <dd>
-                <input type="date" value="{{generator.start.date}}" id="start" name="start" />
+                <input class="date" type="date" value="{{generator.start.date}}" id="start" name="start" />
             </dd>
             <dt>
                 <label for="interval">
@@ -76,9 +78,9 @@
             </dt>
             <dd>
                 <select name="unit" id="unit">
-                    <option value="month" {% ifequal generator.unit "month" %}selected="selected"{%endifequal%}>Months</option>
-                    <option value="week" {% ifequal generator.unit "week" %}selected="selected"{%endifequal%}>Weeks</option>
-                    <option value="day" {% ifequal generator.unit "day" %}selected="selected"{%endifequal%}>Days</option>
+                    <option value="months" {% ifequal generator.unit "months" %}selected="selected"{%endifequal%}>Months</option>
+                    <option value="weeks" {% ifequal generator.unit "weeks" %}selected="selected"{%endifequal%}>Weeks</option>
+                    <option value="days" {% ifequal generator.unit "days" %}selected="selected"{%endifequal%}>Days</option>
                 </select>
             </dd>
             <dt>
@@ -89,8 +91,8 @@
         </dl>
         </fieldset>
     </form>
-    {%if key%}
-    <form action="/generator/addline/{{key}}" method="POST" enctype="multipart/form-data">
+    {%if generator.is_saved%}
+    <form action="/generator/addline/{{generator.key}}" method="POST" enctype="multipart/form-data">
         <fieldset>
             <legend>Billing lines</legend>
             <label for="name">

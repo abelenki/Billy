@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import unittest
@@ -8,6 +8,7 @@ from test.support_random import *
 
 from datetime import datetime
 from datetime import timedelta
+
 
 class TestModelGenerator(unittest.TestCase):
 
@@ -26,8 +27,8 @@ class TestModelGenerator(unittest.TestCase):
     def get_random_generator(
         self,
         interval=1,
-        unit='days',
-        start=datetime.today() - timedelta(days=3),
+        unit='months',
+        start=datetime.today() - relativedelta(months=-3),
         ):
 
         generator = Generator()
@@ -62,7 +63,7 @@ class TestModelGenerator(unittest.TestCase):
     def test_generator_put(self):
         gen = Generator.get(self.get_random_generator().key())
 
-        self.assertEqual(gen.unit, 'days', 'is a generator')
+        self.assertEqual(gen.unit, 'months', 'unit is month')
         self.assertEqual(gen.description, 'foo', 'is a generator')
         self.assertTrue(isinstance(gen, Generator))
         self.assertTrue(isinstance(gen.account, Account))
@@ -130,3 +131,5 @@ class TestModelGenerator(unittest.TestCase):
             self.assertEqual(len(invoice_lines), 1)
             self.assertEqual(invoice_lines[0].name, description)
             self.assertEqual(invoice_lines[0].amount, float(amount))
+
+

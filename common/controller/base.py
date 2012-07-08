@@ -4,6 +4,8 @@
 from __init__ import *
 from common.models import Account
 
+import logging
+
 
 class BaseController(webapp.RequestHandler):
 
@@ -11,7 +13,13 @@ class BaseController(webapp.RequestHandler):
     template_module = ''
 
     def get(self, action, key=None):
+
+        # FIXME mysterious bug this gets set over requests somehow
+
+        self.template_values = {}
+
         self.pre_dispatch(action, key)
+
         if hasattr(self, '%s_action' % action.rstrip('/')):
             method = getattr(self, '%s_action' % action)
             method(key)

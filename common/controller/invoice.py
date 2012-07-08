@@ -218,6 +218,6 @@ class Controller(BaseController):
 
             if self.request.get('customer'):
                 self.template_values['customer_key'] = self.request.get('customer'
-                        )
 
         self.template_values['invoice'] = invoice
+

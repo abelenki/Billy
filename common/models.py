@@ -144,7 +144,8 @@ class Customer(db.Model):
 
 class Generator(db.Model):
 
-    account = db.ReferenceProperty(Account, default=Account().current())
+    account = db.ReferenceProperty(Account, default=Account().current(),
+                                   required=True)
     company = db.ReferenceProperty(Company)
     customer = db.ReferenceProperty(Customer)
 
@@ -187,7 +188,7 @@ class Generator(db.Model):
 
     def generate_invoice(self, invoice_date):
         invoice = Invoice(account=self.account, company=self.company,
-                          cstomer=self.customer, description=self.description,
+                          customer=self.customer, description=self.description,
                           created=invoice_date).put()
 
         for gen_line in self.lines():

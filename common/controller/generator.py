@@ -1,119 +1,71 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 from __init__ import *
 from common.models import *
 
+from base import BaseController
 
-class Controller(webapp.RequestHandler):
+import logging
 
-    def get(self, action, key=None):
-        self.template_values = {}
-        account = Account().current()
+from datetime import datetime
 
-        if key and action in ['edit', 'save']:
-            generator = Generator.get(key)
-            if account.key() != generator.account.key():
-                self.accessForbidden()
 
-        if hasattr(self, '%sAction' % action.rstrip('/')):
-            method = getattr(self, '%sAction' % action)
-            method(key)
+class Controller(BaseController):
 
-        self.renderTemplate(action, self.template_values)
+    template_module = 'generator'
 
-    def post(self, action, key=None):
-        if key and action in ['edit', 'save']:
-            account = Account().current()
-            generator = Generator.get(key)
-            if account.key() != generator.account.key():
-                self.accessForbidden()
-
-        if hasattr(self, '%sAction' % action.rstrip('/')):
-            method = getattr(self, '%sAction' % action)
-            method(key)
-
-    def renderTemplate(self, action, template_values):
-        path = os.path.join(os.path.dirname(__file__),
-                            '../template/generator/%s.html' % action)
-        if os.path.exists(path):
-            self.response.out.write(template.render(path,
-                                    self.template_values))
-
-    def accessForbidden(self):
-        self.response.out.write('You do not own that account')
-        self.response.set_status(403)
-        exit()
-
-    def runAction(self, key):
-        gen = Generator.get(urllib.unquote(key))
-        gen.run()
-
-        log = GeneratorLog()
-        log.generator = gen
-        log.text = 'ran %s' % gen.description
-        log.put()
-
-        self.redirect('/generator/edit/%s' % gen.key())
-
-    def saveAction(self, key):
-        account = Account().current()
-
-        log = GeneratorLog()
-
+    def pre_dispatch(self, action, key=None):
         if key:
-            generator = db.get(urllib.unquote(key))
-            if generator.account.key() != account.key():
-                self.accessForbidden()
-
-            log.text = 'created %s' % self.request.get('description')
+            self.generator = Generator.get(key)
+            self._check_account(self.generator.account)
         else:
+            self.generator = Generator()
 
-            generator = Generator()
-            generator.account = account
+    def run_action(self, key):
+        self.generator.run()
 
-            generator.company = \
-                Company.get(urllib.unquote(self.request.get('company')))
-            generator.customer = \
-                Customer.get(urllib.unquote(self.request.get('customer'
-                             )))
-            log.text = 'updated %s' % self.request.get('description')
+    def save_action(self, key):
+        for (key, prop) in Generator.properties().items():
+            value = self.request.get(key)
 
-        generator.start = datetime.strptime(self.request.get('start'),
-                '%Y-%m-%d')
-        generator.description = self.request.get('description')
-        generator.interval = int(self.request.get('interval'))
+            if not value:
+                continue
 
-        unit = ['month', 'week', 'day']
-        generator.unit = unit[unit.index(self.request.get('unit'))]
+            if type(prop).__name__ is 'IntegerProperty':
+                value = int(value)
 
-        generator.put()
+            if type(prop).__name__ is 'FloatProperty':
+                value = float(value)
 
-        log.generator = generator
-        log.put()
+            if type(prop).__name__ is 'ReferenceProperty':
+                value = db.get(value)
 
-        self.redirect('/generator/edit/%s' % generator.key())
+            if type(prop).__name__ is 'DateTimeProperty':
+                value = datetime.strptime(value, '%Y-%m-%d')
 
-    def editAction(self, key):
+            self.generator.__setattr__(key, value)
+
+        if not self.generator.unit in ['days', 'weeks', 'months']:
+            self.generator.unit = 'months'  # safeguard for invalid data
+
+        self.generator.put()
+        self.redirect('/generator/edit/%s' % self.generator.key())
+
+    def edit_action(self, key):
         account = Account().current()
 
         self.template_values['customers'] = account.customers()
         self.template_values['companies'] = account.companies()
         self.template_values['last_run'] = 'never'
 
-        if key:
-            generator = Generator.get(key)
-            self.template_values['key'] = key
-        else:
-            generator = Generator()
+        if self.generator.lastrun:
+            delta = datetime.today() - self.generator.lastrun
+            self.template_values['last_run'] = '%d days ago' % delta.days
 
-        if generator.lastrun:
-            delta = datetime.today() - generator.lastrun
-            self.template_values['last_run'] = '%d days ago' \
-                % delta.days
+        self.template_values['generator'] = self.generator
 
-        self.template_values['generator'] = generator
-
-    def deleteAction(self, key):
+    def delete_action(self, key):
 
         # lazy delete: should check if everything is cleaned up
 
@@ -132,11 +84,11 @@ class Controller(webapp.RequestHandler):
 
         self.redirect('/generator/list/')
 
-    def listAction(self, key):
+    def list_action(self, key):
         account = Account().current()
         self.template_values['generators'] = account.generators()
 
-    def addlineAction(self, key):
+    def addline_action(self, key):
         generator = Generator.get(urllib.unquote(key))
         line = GeneratorLine()
 
@@ -146,12 +98,9 @@ class Controller(webapp.RequestHandler):
 
         line.put()
 
-        # print line.key()
-        # return
-
         self.redirect('/generator/edit/%s' % generator.key())
 
-    def dellineAction(self, key):
+    def delline_action(self, key):
         line = GeneratorLine.get(urllib.unquote(key))
 
         generator = line.generator

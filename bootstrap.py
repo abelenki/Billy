@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 import os
 import cgi
 import logging
@@ -30,7 +31,7 @@ import common.controller.invoice
 import common.controller.company
 import common.controller.customer
 import common.controller.render
-import common.generator
+import common.controller.generator
 import common.user
 
 # sys.path.insert(0, 'reportlab.zip')
@@ -45,7 +46,7 @@ application = webapp.WSGIApplication([
     ('/company\/?(.*)', common.controller.company.Controller),
     ('/invoice\/?(.*)/(.*)', common.controller.invoice.Controller),
     ('/render\/?(.*)/(.*)', common.controller.render.Controller),
-    ('/generator\/?(.*)/(.*)', common.generator.Controller),
+    ('/generator\/?(.*)/(.*)', common.controller.generator.Controller),
     ('/customer\/?(.*)/(.*)', common.controller.customer.Controller),
     ('/user\/?(.*)/(.*)', common.user.Controller),
     ('/?(.*)', common.user.Controller),
