@@ -39,9 +39,10 @@ Amsterdam'''
 
 
 def random_word():
-    max_len = 20
+    max_len = 12
     vowels = list('qwrtypsdfghklzxcvbnm')
-    consonants = list('aeouáéóúöüë')
+    consonants = list('aeouá')
+#    consonants = list('aeouáéóúöüë')
     w = []
     for i in range(0, max_len):
         n_conson = randint(1, 3) % 2 + 1
@@ -54,7 +55,6 @@ def random_word():
 def random_char(chars=None):
     if not chars:
         chars = list('abcdefghijklmnopqrstuvwxyz')
-
     return chars[randint(0, len(chars) - 1)]
 
 
