@@ -23,29 +23,35 @@
         <div class="float-right third"><a href="?tab={{ tab }}&first={{ pager.first }}&page={{ pager.next }}">next &raquo;</a></div>
         {%  endif %}
     </div>
+    <div id="list-content-container">        
     <table id="list-content">
-        <tr>
-            <th>name</th>
-            <th>description</th>
-            <th colspan="4">actions</th>
-            <th>status</th>
-            <th>bill no</th>
-            <th>amount</th>
-        </tr>
-        {% for invoice in invoices %}
-        <tr class="{% cycle uneven,even %}">
-            <td>{{invoice.customer.fullname}}</td>
-            <td>{{invoice.description|truncatewords:3|urlizetrunc:10}}</td>
-            <td><a href="/invoice/edit/{{invoice.key}}">edit</a></td>
-            <td><a href="/render/invoice/{{invoice.key}}">download</a></td>
-            <td><a href="/render/mail/{{invoice.key}}?continue={{request.url}}">e-mail</a></td>
-            <td><a href="/invoice/delete/{{invoice.key}}">delete</a></td>
-            <td class="due-status-{{invoice.status}}">{{invoice.duedate}}</td>
-            <td>{{invoice.billing_number}}</td>
-            <td>{{invoice.total}}
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>name</th>
+                <th>description</th>
+                <th colspan="4">actions</th>
+                <th>status</th>
+                <th>bill no</th>
+                <th>amount</th>
+            </tr>            
+        </thead>
+        <tbody>
+            {% for invoice in invoices %}
+            <tr class="{% cycle uneven,even %}">
+                <td>{{invoice.customer.fullname}}</td>
+                <td>{{invoice.description|truncatewords:3|urlizetrunc:10}}</td>
+                <td><a href="/invoice/edit/{{invoice.key}}">edit</a></td>
+                <td><a href="/render/invoice/{{invoice.key}}">download</a></td>
+                <td><a href="/render/mail/{{invoice.key}}?continue={{request.url}}">e-mail</a></td>
+                <td><a href="/invoice/delete/{{invoice.key}}">delete</a></td>
+                <td class="due-status-{{invoice.status}}">{{invoice.duedate}}</td>
+                <td>{{invoice.billing_number}}</td>
+                <td>{{invoice.total}}</td>
+            </tr>
+            {% endfor %}            
+        </tbody>
     </table>
+    </div>
 {% endif %}
 </div>
 {% endif %}

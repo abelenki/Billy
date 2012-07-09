@@ -75,7 +75,7 @@ div#footer{width:960px;margin:auto;margin:3em auto;background-color:#fafafa;font
 #list-tabs li a:hover{ color:#fff;background-color:#4488cc;text-shadow:#ccc 1px 1px 1px;}
 
 /*lists/table*/
-#list-content{background-color:#eee;margin-top: 1em;order-radius: 5px; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius:5px 5px 5px 5px;}
+#list-content{background-color:#eee;margin-top: 1em;border-radius: 7px; -webkit-border-radius: 7px 7px 7px 7px; -moz-border-radius:7px 7px 7px 7px;}
 #list-content tr, #list-content li{line-height:2.4em;}
 #list-content td, #list-content th{padding:0 1em;}
 
@@ -101,17 +101,26 @@ ul.hnav li:last-child{border:none;}
 ul.hnav li a{color:#444; padding:0 1em; display:inline;text-shadow:#eee 1px 1px 0px;}
 
 .even, .uneven{
-    background: #eee; /* old browsers */
-    background: -moz-linear-gradient(top, #fff 35%, #eee 80%, #eee 100%); /* firefox */
-    background: -o-linear-gradient(top, #fff 35%,#eee 80%,#eee 100%); /* opera */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(35%,#fff), color-stop(80%,#eee), color-stop(100%,#eee)); /* webkit */
-    border-bottom:1px solid #e6e6e6;
+    background: #fdfdfd;
+    background: -moz-linear-gradient(top, #fdfdfd 0%, #fefefe 56%, #ffffff 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fdfdfd), color-stop(56%,#fefefe), color-stop(100%,#ffffff));
+    background: -webkit-linear-gradient(top, #fdfdfd 0%,#fefefe 56%,#ffffff 100%);
+    background: -o-linear-gradient(top, #fdfdfd 0%,#fefefe 56%,#ffffff 100%);
+    background: -ms-linear-gradient(top, #fdfdfd 0%,#fefefe 56%,#ffffff 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%,#fefefe 56%,#ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#ffffff',GradientType=0 );
 }
 
-/*.uneven{
-    background-color:#e8f0ff;
+.uneven {
+    background: #fafafa;
+    border: 1px solid #f0f0f0;
+    border-width: : 1px 0;
 }
-*/
+
+tr:last-child {
+    border-bottom: 2px solid #f0f0f0;
+}
+
 
 /*invoice status*/
 .due-status-1{background-color:#cceeff;}
