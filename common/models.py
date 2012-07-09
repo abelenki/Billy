@@ -178,17 +178,20 @@ class Generator(db.Model):
             if invoice_date > today:
                 break
 
+            self.generate_invoice(invoice_date, self.lastrun)
             self.lastrun = invoice_date
-            self.generate_invoice(invoice_date)
 
             count += 1
 
         self.count = count
         self.put()
 
-    def generate_invoice(self, invoice_date):
+    def generate_invoice(self, invoice_date, last_run):
+        description = '%s %s - %s' % (self.description, last_run.strftime('%x'),
+                                      invoice_date.strftime('%x'))
+
         invoice = Invoice(account=self.account, company=self.company,
-                          customer=self.customer, description=self.description,
+                          customer=self.customer, description=description,
                           created=invoice_date).put()
 
         for gen_line in self.lines():
